@@ -4,19 +4,8 @@ defmodule Hangman.GameServer do
 
     @me :game_server
 
-    @doc """
-    Start the GenServer and initialize game state with a random word.
-    """
-    def start_link do
-        GenServer.start_link(__MODULE__, Game.new_game, name: @me)
-    end
-
-    @doc """
-    Start the GenServer and initialize game state with a chosen word.
-    """
-    def start_link(word) do
-        GenServer.start_link(__MODULE__, Game.new_game(word), name: @me)
-    end
+    def start_link,       do: GenServer.start_link(__MODULE__, Game.new_game, name: @me)
+    def start_link(word), do: GenServer.start_link(__MODULE__, Game.new_game(word), name: @me)
 
     def crash(reason), do: GenServer.cast(@me, { :crash, reason })
 
