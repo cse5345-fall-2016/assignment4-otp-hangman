@@ -36,6 +36,8 @@ defmodule Hangman.Dictionary do
     GenServer.call(@me, { :words_of_length, len })
   end
 
+  def crash(reason), do: GenServer.cast(@me, { :crash, reason })
+
 
   #######################
   # Server Implemention #
@@ -54,6 +56,13 @@ defmodule Hangman.Dictionary do
   end
   def handle_call({ :words_of_length, len }, _from, words) do
     { :reply, words |> words_of_length(len), words }
+  end
+  
+  @doc """
+  GenServer.handle_cast/2 callback
+  """
+  def handle_cast({ :crash, reason }, state) do
+      { :stop, reason, state }
   end
 
 

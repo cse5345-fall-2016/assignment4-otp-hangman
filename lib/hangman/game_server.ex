@@ -18,6 +18,8 @@ defmodule Hangman.GameServer do
         GenServer.start_link(__MODULE__, Game.new_game(word), name: @me)
     end
 
+    def crash(reason), do: GenServer.cast(@me, { :crash, reason })
+
     def make_move(guess),                do: GenServer.call(@me, { :make_move, guess })
     def word_length,                     do: GenServer.call(@me, { :word_length })
     def letters_used_so_far,             do: GenServer.call(@me, { :letters_used_so_far })
@@ -52,6 +54,13 @@ defmodule Hangman.GameServer do
     end
     def handle_call({ :word_as_string, reveal }, _from, state) do
         { :reply, state |> Game.word_as_string(reveal), state }
+    end
+
+    @doc """
+    GenServer.handle_cast/2 callback
+    """
+    def handle_cast({ :crash, reason }, state) do
+        { :stop, reason, state }
     end
 
 end
