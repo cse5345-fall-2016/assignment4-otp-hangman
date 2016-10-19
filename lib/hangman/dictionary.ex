@@ -38,16 +38,16 @@ defmodule Hangman.Dictionary do
   # End of public interface #
   ###########################
 
-  def handle_call(:random_word, _from, word_list) do 
-    word = word_list
+  def handle_call(:random_word, _from, words_state) do 
+    word = words_state
           |> Enum.random
           |> String.trim
 
-    { :reply, word, word_list }
+    { :reply, word, words_state }
   end
 
-  def handle_call({:words_of_length, len}, _from, word_list) do
-     words = word_list
+  def handle_call({:words_of_length, len}, _from, words_state) do
+     words = words_state
             |> Stream.map(&String.trim/1)
             |> Enum.filter(&(String.length(&1) == len))
 
