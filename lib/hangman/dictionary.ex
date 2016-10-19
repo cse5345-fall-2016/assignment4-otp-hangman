@@ -24,7 +24,7 @@ defmodule Hangman.Dictionary do
   """
   @spec random_word() :: binary
   def random_word do
-    GenServer.call(@me, :random_word)
+    GenServer.call(@me, { :random_word })
   end
 
   @doc """
@@ -49,7 +49,7 @@ defmodule Hangman.Dictionary do
   @doc """
   GenServer.handle_call/3 callback
   """
-  def handle_call(:random_word, _from, words) do
+  def handle_call({ :random_word }, _from, words) do
     { :reply, words |> random_word, words }
   end
   def handle_call({ :words_of_length, len }, _from, words) do
