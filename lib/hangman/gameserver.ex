@@ -9,23 +9,27 @@ defmodule Hangman.GameServer do
   # Api #
   #######
 
-  def start_link(word \\ []) do
+  def start_link(word \\ Hangman.Dictionary.random_word) do
     GenServer.start(__MODULE__, word, name: @me)
   end
 
-  def make_move(guess) do
-    GenServer.cast( @me, { :make_move, guess })
+  def new_game(word \\ Hangman.Dictionary.random_word) do
+    GenServer.cast( @me, { :new_game, word })
   end
 
-  def word_length() do
+  def make_move(guess) do
+    GenServer.call( @me, { :make_move, guess })
+  end
+
+  def word_length do
     GenServer.call( @me, { :word_length })
   end
 
-  def letters_used_so_far() do
+  def letters_used_so_far do
     GenServer.call( @me, { :letters_used_so_far })
   end
 
-  def turns_left() do
+  def turns_left  do
     GenServer.call( @me, { :turns_left })
   end
 
@@ -37,17 +41,17 @@ defmodule Hangman.GameServer do
   # Server Implemention #
   #######################
 
-  def init(word \\ Hangman.Dictionary.random_word) do
-    { :ok, %{
-              word:        String.codepoints(word) |> Enum.map(&{&1, false}),
-              turns_left:  10,
-              guessed:     MapSet.new,
-            }
-    }
+  def init(word) do
+    { :ok, Impl.new_game(word)}
   end
 
-  def handle_cast( { :make_move, guess }, _from, state) do
-    { :noreply, Impl.make_move(state, guess) }
+  def handle_cast({ :new_game, word }, _state) do
+    { :noreply, Impl.new_game(word)}
+  end
+
+  def handle_call( { :make_move, guess }, _from, state) do
+    {newstate, atom, ch} = Impl.make_move(state, guess)
+    { :reply, {newstate, atom, ch} , IO.inspect newstate }
   end
 
   def handle_call( { :word_length }, _from, state) do
