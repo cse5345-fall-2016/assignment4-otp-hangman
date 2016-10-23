@@ -8,7 +8,8 @@ defmodule Hangman do
 
     # Define workers and child supervisors to be supervised
     children = [
-      worker(Hangman.Dictionary, args)
+      worker(Hangman.Dictionary, args),
+      worker(Hangman.GameServer, args)
       # Starts a worker by calling: HangmanOtp.Worker.start_link(arg1, arg2, arg3)
       # worker(HangmanOtp.Worker, [arg1, arg2, arg3]),
     ]

@@ -49,18 +49,18 @@ defmodule Hangman.Dictionary do
     GenServer.start_link(__MODULE__, default, name: @name)
   end
 
-  def handle_call(:getWord, _from, _state) do
+  def handle_call(:getWord, _from, state) do
     word= word_list
     |> Enum.random
     |> String.trim
-    {:reply, word}
+    {:reply, word, state}
   end
 
-  def handle_call({:length_of_words, len}, _from, _state) do
+  def handle_call({:length_of_words, len}, _from, state) do
     words= word_list
     |> Stream.map(&String.trim/1)
     |> Enum.filter(&(String.length(&1) == len))
-    {:reply, words}
+    {:reply, words, state}
   end
   
 end
