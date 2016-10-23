@@ -1,23 +1,19 @@
-defmodule Hangman do
+defmodule Hangman.MainSupervisor do
+
   use Application
 
-  @moduledoc """
-
-  Write your description of your supervision scheme here...
-
-  """
-
   def start(_type, _args) do
+    import Supervisor.Spec, warn: false
 
-    # Uncomment and complete this:
+    children = [
+      supervisor(Hangman.GameSupervisor, [])
+    ]
 
-    # import Supervisor.Spec, warn: false
-    # 
-    # children = [
-    # ]
-    # 
-    # opts = [strategy: :you_choose_a_strategy, name: Hangman.Supervisor]
-    # Supervisor.start_link(children, opts)
+    opts = [
+      strategy: :one_for_one,
+      name: Hangman.MainSupervisor
+    ]
+
+    Supervisor.start_link(children, opts)
   end
 end
-
