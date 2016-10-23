@@ -3,42 +3,42 @@ defmodule Hangman.GameServer do
   use GenServer
 
   alias Hangman.Game, as: Impl
-  @me __MODULE__
+  @servername :gameserver
 
   #######
   # Api #
   #######
 
   def start_link(word \\ Hangman.Dictionary.random_word) do
-    GenServer.start_link(__MODULE__, word, name: :gameserver)
+    GenServer.start_link(__MODULE__, word, name: @servername)
   end
 
   def new_game(word \\ Hangman.Dictionary.random_word) do
-    GenServer.cast( :gameserver, { :new_game, word })
+    GenServer.cast( @servername, { :new_game, word })
   end
 
   def make_move(guess) do
-    GenServer.call( :gameserver, { :make_move, guess })
+    GenServer.call( @servername, { :make_move, guess })
   end
 
   def word_length do
-    GenServer.call( :gameserver, { :word_length })
+    GenServer.call( @servername, { :word_length })
   end
 
   def letters_used_so_far do
-    GenServer.call( :gameserver, { :letters_used_so_far })
+    GenServer.call( @servername, { :letters_used_so_far })
   end
 
   def turns_left  do
-    GenServer.call( :gameserver, { :turns_left })
+    GenServer.call( @servername, { :turns_left })
   end
 
   def word_as_string(reveal \\ false) do
-    GenServer.call( :gameserver, { :word_as_string, reveal })
+    GenServer.call( @servername, { :word_as_string, reveal })
   end
 
   def crash(reason) do
-    GenServer.cast( :gameserver, { :crash, reason })
+    GenServer.cast( @servername, { :crash, reason })
   end
 
   #######################
