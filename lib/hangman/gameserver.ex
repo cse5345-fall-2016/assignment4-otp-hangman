@@ -10,35 +10,35 @@ defmodule Hangman.GameServer do
   #######
 
   def start_link(word \\ Hangman.Dictionary.random_word) do
-    GenServer.start(__MODULE__, word, name: @me)
+    GenServer.start_link(__MODULE__, word, name: :gameserver)
   end
 
   def new_game(word \\ Hangman.Dictionary.random_word) do
-    GenServer.cast( @me, { :new_game, word })
+    GenServer.cast( :gameserver, { :new_game, word })
   end
 
   def make_move(guess) do
-    GenServer.call( @me, { :make_move, guess })
+    GenServer.call( :gameserver, { :make_move, guess })
   end
 
   def word_length do
-    GenServer.call( @me, { :word_length })
+    GenServer.call( :gameserver, { :word_length })
   end
 
   def letters_used_so_far do
-    GenServer.call( @me, { :letters_used_so_far })
+    GenServer.call( :gameserver, { :letters_used_so_far })
   end
 
   def turns_left  do
-    GenServer.call( @me, { :turns_left })
+    GenServer.call( :gameserver, { :turns_left })
   end
 
   def word_as_string(reveal \\ false) do
-    GenServer.call( @me, { :word_as_string, reveal })
+    GenServer.call( :gameserver, { :word_as_string, reveal })
   end
 
   def crash(reason) do
-    GenServer.cast( @me, { :crash, reason })
+    GenServer.cast( :gameserver, { :crash, reason })
   end
 
   #######################

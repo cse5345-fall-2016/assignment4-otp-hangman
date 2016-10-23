@@ -11,7 +11,7 @@ defmodule Hangman.Dictionary do
   @word_list_file_name "assets/words.8800"
 
   def start_link() do
-    GenServer.start(__MODULE__, name: @me)
+    GenServer.start(__MODULE__, name: :dictionary)
   end
 
   @doc """
@@ -21,7 +21,7 @@ defmodule Hangman.Dictionary do
 
   @spec random_word() :: binary
   def random_word do
-    GenServer.call(@me, {:random_word})
+    GenServer.call(:dictionary, {:random_word})
   end
 
   @doc """
@@ -30,7 +30,7 @@ defmodule Hangman.Dictionary do
   """
   @spec words_of_length(integer)  :: [ binary ]
   def words_of_length(len) do
-    GenServer.call(@me, {:words_of_length, len})
+    GenServer.call(:dictionary, {:words_of_length, len})
   end
 
 
@@ -38,9 +38,6 @@ defmodule Hangman.Dictionary do
   # End of public interface #
   ###########################
 
-  defp word_list do
-    GenServer.cast(@me, {:word_list})
-  end
 
   #########################
   # Server Implementation #
@@ -50,25 +47,24 @@ defmodule Hangman.Dictionary do
     { :ok }
   end
 
-  def handle_call({:random_word}, _from, _state) do
+  def handle_call({:random_word}, _from, state) do
     { :reply, word_list
               |> Enum.random
-              |> String.trim
+              |> String.trim, state
     }
   end
 
-  def handle_call({:words_of_length, len}, _from, _state) do
+  def handle_call({:words_of_length, len}, _from, state) do
     { :reply, word_list
               |> Stream.map(&String.trim/1)
-              |> Enum.filter(&(String.length(&1) == len))
+              |> Enum.filter(&(String.length(&1) == len)), state
     }
   end
 
-  def handle_cast({:word_list}, _state) do
-    { :noreply, @word_list_file_name
-                |> File.open!
-                |> IO.stream(:line)
-    }
+  defp word_list do
+    @word_list_file_name
+    |> File.open!
+    |> IO.stream(:line)
   end
 
 end
