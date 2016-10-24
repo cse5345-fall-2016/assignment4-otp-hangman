@@ -1,5 +1,6 @@
 defmodule GameTest do
   use ExUnit.Case
+  require Logger
 
   alias Hangman.GameServer, as: Game
 
@@ -149,7 +150,7 @@ defmodule GameTest do
         assert Game.turns_left == left
       end)
 
-      Game.crash(:normal)
+      Game.crash(:kill)
     end
 
   end
