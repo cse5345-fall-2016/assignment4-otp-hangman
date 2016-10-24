@@ -1,17 +1,18 @@
-defmodule Hangman.MainSupervisor do
+defmodule Hangman do
 
   use Application
+  @me Hangman.Supervisor
 
   def start(_type, _args) do
     import Supervisor.Spec, warn: false
 
     children = [
-      supervisor(Hangman.GameSupervisor, [])
+      supervisor(Hangman.GameSupervisor, [[], [name: @me]])
     ]
 
     opts = [
       strategy: :one_for_one,
-      name: Hangman.MainSupervisor
+      name: Hangman.Supervisor
     ]
 
     Supervisor.start_link(children, opts)

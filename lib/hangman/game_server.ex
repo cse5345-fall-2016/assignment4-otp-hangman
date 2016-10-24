@@ -1,67 +1,63 @@
 defmodule Hangman.GameServer do
   use GenServer
+
   alias Hangman.Game, as: Impl
-  @me __MODULE__
+  @me :gameserver
 
-  def start_link(module, default \\ []) do
-    GenServer.start_link(module, default, name: @me)
+  def start_link(default \\ []) do
+    GenServer.start_link(__MODULE__, default, name: @me)
   end
-
-  #def new_game(word) do
-  #  GenServer.call(@me, { :new_game, word })
-  #end
 
   def make_move(guess) do
-    game_state = GenServer.call(@me, { :new_game, nil })
-    GenServer.call(@me, { :make_move, game_state, guess })
+    GenServer.call(@me, { :make_move, guess })
   end
 
-  def word_length(game_state) do
-    GenServer.call(@me, { :word_length, game_state })
+  def word_length() do
+    GenServer.call(@me, { :word_length })
   end
 
-  def letters_used_so_far(game_state) do
-    GenServer.call(@me, { :letters_used_so_far, game_state })
+  def letters_used_so_far() do
+    GenServer.call(@me, { :letters_used_so_far })
   end
 
-  def turns_left(game_state) do
-    GenServer.call(@me, { :turns_left, game_state })
+  def turns_left() do
+    GenServer.call(@me, { :turns_left })
   end
 
-  def word_as_string(game_state, boolean) do
-    GenServer.call(@me, { :word_as_string, game_state, boolean})
+  def word_as_string(reveal \\ false) do
+    GenServer.call(@me, { :word_as_string, reveal })
   end
 
   #######################
   # Server Implemention #
   #######################
 
-  def init(state) do
-    { :ok, state }
+  def init(_args) do
+    { :ok, Impl.new_game() }
   end
 
-  def handle_call({ :new_game, word }, _from, state) do
-    { :reply, Impl.new_game(word), state }
+  def handle_call({ :make_move, guess }, _from, state) do
+    {state, status, _guess} = Impl.make_move(state, guess)
+    { :reply, status, state }
+
+    #tuple = Impl.make_move(state, guess)
+    #{ :reply, elem(tuple, 1), elem(tuple, 0) }
   end
 
-  def handle_call({ :make_move, game_state, guess }, _from, state) do
-    { :reply, Impl.make_move(game_state, guess), state }
+  def handle_call({ :word_length }, _from, state) do
+    { :reply, Impl.word_length(state), state }
   end
 
-  def handle_call({ :word_length, game_state }, _from, state) do
-    { :reply, Impl.word_length(game_state), state }
+  def handle_call({ :letters_used_so_far }, _from, state) do
+    { :reply, Impl.letters_used_so_far(state), state }
   end
 
-  def handle_call({ :letters_used_so_far, game_state }, _from, state) do
-    { :reply, Impl.letters_used_so_far(game_state), state }
+  def handle_call({ :turns_left }, _from, state) do
+    { :reply, Impl.turns_left(state), state }
   end
 
-  def handle_call({ :turns_left, game_state }, _from, state) do
-    { :reply, Impl.turns_left(game_state), state }
-  end
-
-  def handle_call({ :word_as_string, game_state, boolean }, _from, state) do
-    { :reply, Impl.word_as_string(game_state, boolean), state }
+  def handle_call({ :word_as_string, reveal }, _from, state) do
+    { :reply, Impl.word_as_string(state, reveal), state }
   end
 
 end

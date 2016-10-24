@@ -1,20 +1,22 @@
 defmodule Hangman.GameSupervisor do
-  use Application
+  use Supervisor
 
-  def start_link(_type, args) do
+  def start_link(_type, _args) do
     import Supervisor.Spec, warn: false
 
     children = [
-      worker(Hangman.Dictionary, args),
-      worker(Hangman.GameServer, args, restart: :transient)
+      worker(Hangman.Dictionary, []),
+      worker(Hangman.GameServer, [], restart: :transient)
     ]
 
     opts = [
-      strategy: :one_for_all,
+      strategy: :rest_for_one,
       name: Hangman.GameSupervisor
     ]
 
     Supervisor.start_link(children, opts)
   end
+
+  def init(_args), do: {:ok, :ignore}
 
 end

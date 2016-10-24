@@ -15,7 +15,7 @@ defmodule Hangman.Mixfile do
   # Type "mix help compile.app" for more information
   def application do
     [applications: [:logger],
-     mod: {Hangman.MainSupervisor, []}]
+     mod: {Hangman, []}]
   end
 
   # Dependencies can be Hex packages:
