@@ -29,7 +29,7 @@ defmodule Hangman.Dictionary do
   end
 
   def start_link() do
-    state = word_list
+    state = word_list |> Enum.to_list
     {:ok,_pid} = GenServer.start_link( __MODULE__, state, name: __MODULE__)
   end 
 
@@ -40,18 +40,18 @@ defmodule Hangman.Dictionary do
 
   def handle_call(:random_word, _from, words_state) do 
     word = words_state
-          |> Enum.random
-          |> String.trim
+           |> Enum.random
+           |> String.trim
 
     { :reply, word, words_state }
   end
 
   def handle_call({:words_of_length, len}, _from, words_state) do
-     words = words_state
+    words = words_state
             |> Stream.map(&String.trim/1)
             |> Enum.filter(&(String.length(&1) == len))
 
-    { :reply, words, word_list }
+    { :reply, words, words_state }
   end
 
   defp word_list do

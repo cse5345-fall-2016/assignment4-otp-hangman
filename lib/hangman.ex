@@ -14,10 +14,15 @@ defmodule Hangman do
     import Supervisor.Spec, warn: false
     
     children = [
-      worker(Hangman.Dictionary, [])
+      worker(Hangman.Dictionary, []), 
+      supervisor(Hangman.SubSupervisor, [])
     ]
     
-    opts = [strategy: :rest_for_one, name: Hangman.Supervisor]
+    opts = [
+      strategy: :rest_for_one, 
+      name: __MODULE__
+    ]
+
     Supervisor.start_link(children, opts)
   end
 end
