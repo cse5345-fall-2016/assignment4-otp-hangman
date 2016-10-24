@@ -150,7 +150,7 @@ defmodule GameTest do
         assert Game.turns_left == left
       end)
 
-      Game.crash(:kill)
+      Game.crash(:normal)
     end
 
   end
