@@ -1,5 +1,6 @@
 defmodule GameTest do
   use ExUnit.Case
+  require Logger
 
   alias Hangman.GameServer, as: Game
 
