@@ -1,20 +1,12 @@
 defmodule Hangman.GameSupervisor do
   use Application
 
-  def start(_type, _args) do
-    call_supervisor()
-  end
-
-  def start_link(_type, _args) do
-    call_supervisor()
-  end
-
-  def call_supervisor() do
+  def start_link(_type, args) do
     import Supervisor.Spec, warn: false
 
     children = [
-      worker(Hangman.Dictionary, []),
-      worker(Hangman.GameServer, [], restart: :transient)
+      worker(Hangman.Dictionary, args),
+      worker(Hangman.GameServer, args, restart: :transient)
     ]
 
     opts = [
