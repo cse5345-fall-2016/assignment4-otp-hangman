@@ -25,12 +25,12 @@ defmodule Hangman do
     # Uncomment and complete this:
 
     import Supervisor.Spec, warn: false
-    
+
     children = [
       worker(Hangman.Dictionary, [], restart: :permanent)
       supervisor(GameSupervisor, [])
     ]
-    
+
     opts = [strategy: :one_for_all, name: Hangman.Supervisor]
     Supervisor.start_link(children, opts)
   end
