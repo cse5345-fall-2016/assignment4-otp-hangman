@@ -10,7 +10,7 @@ defmodule Hangman.GameSupervisor do
 	end
 
 	def init(args) do
-		children = [ worker( Hangman.GameServer, args, restart: :transient ) ]
+		children = [worker(Hangman.GameServer, args, restart: :transient)]
 		supervise(children, [strategy: :one_for_one, name: __MODULE__])
 	end
 

@@ -18,9 +18,9 @@ defmodule Hangman.GameServer do
 
 	# Game Server API Implementation (as defined in Game.ex)
 
-	# def new_game(word \\ Dictionary.random_word) do
-	# 	GenServer.cast @me, { :newGame, word }
-	# end
+	def new_game(word \\ Dictionary.random_word) do
+		GenServer.cast @me, { :newGame, word }
+	end
 
 	def make_move(guess) do
 		GenServer.call(@me, { :make_move, guess })
@@ -35,7 +35,7 @@ defmodule Hangman.GameServer do
 	end
 
 	def turns_left do
-		GenServer.call(@me, { :turns_left }
+		GenServer.call(@me, { :turns_left })
 	end
 
 	def word_as_string(reveal \\ false) do
@@ -54,7 +54,8 @@ defmodule Hangman.GameServer do
 	end
 
 	def handle_call({ :make_move, guess }, _from, state) do
-		{:reply, Game.word_as_string(state, reveal), state}
+		{ updated_state, status, _guess } = Game.make_move(state, guess)
+		{:reply, status, updated_state}
 	end
 
 	def handle_call({ :word_length }, _from, state) do
@@ -67,6 +68,10 @@ defmodule Hangman.GameServer do
 
 	def handle_call({ :word_as_string, reveal }, _from, state) do
 		{:reply, Game.word_as_string(state, reveal), state}
+	end
+
+	def handle_cast({ :new_game, word }, _from, state) do
+		{:no_reply, Game.new_game(word)}
 	end
 
 	def handle_cast({ :crash, exit_code }, _from, state) do
