@@ -18,6 +18,9 @@ defmodule Hangman do
   If the game ends normally, it should not restart.
 
 
+  I had lots of issues getting this module to launch the Game Supervisor and Game Server.
+  The stack trace/errors that that "mix test" gives you when the error involves supervisor parts of the application can be diffucult to decipher.
+
   """
 
   def start(_type, _args) do

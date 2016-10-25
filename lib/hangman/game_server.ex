@@ -36,7 +36,7 @@ defmodule Hangman.GameServer do
 	end
 
 	def word_as_string(reveal \\ false) do
-		GenServer.call(@me, { :word_as_string, reveal })
+		GenServer.call(@me, { :word, reveal })
 	end
 
 	def crash(exit_code) do
@@ -67,7 +67,7 @@ defmodule Hangman.GameServer do
 		{:reply, Hangman.Game.turns_left(state), state}
 	end
 
-	def handle_call({ :word_as_string, reveal }, _from, state) do
+	def handle_call({ :word, reveal }, _from, state) do
 		{:reply, Hangman.Game.word_as_string(state, reveal), state}
 	end
 
