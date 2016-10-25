@@ -10,9 +10,11 @@ defmodule Hangman.Mixfile do
      deps: deps()]
   end
 
+  # add Hangman mod
   def application do
     [
       applications: [:logger],
+      mod: {Hangman, []}
     ]
   end
 
