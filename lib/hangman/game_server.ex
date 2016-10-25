@@ -50,7 +50,7 @@ defmodule Hangman.GameServer do
 	# Server Implementation
 
 	def init(word) do
-		{:ok, Game.new_game(word)}
+		{:ok, word}
 	end
 
 	def handle_call({ :make_move, guess }, _from, state) do
