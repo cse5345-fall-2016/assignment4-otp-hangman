@@ -1,7 +1,7 @@
 defmodule Hangman do
   use Application
 
-  @strategy :one_for_all
+  @strategy :one_for_one
 
   @restart :permanent
 
@@ -20,7 +20,7 @@ defmodule Hangman do
 
     children = [
       worker(Hangman.Dictionary, [:dictionary], id: :dictionary, restart: @restart),
-      worker(Hangman.Game, [:game], id: :game, restart: @restart)
+      worker(Hangman.GameHandler, [:game], id: :game, restart: @restart)
     ]
 
     opts = [strategy: @strategy, name: Hangman.Supervisor]

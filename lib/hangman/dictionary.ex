@@ -23,6 +23,7 @@ defmodule Hangman.Dictionary do
 
   @spec random_word() :: binary
   def random_word do
+    IO.inspect @me
     GenServer.call(@me, {:random_word})
   end
 
@@ -32,11 +33,12 @@ defmodule Hangman.Dictionary do
   """
   @spec words_of_length(integer)  :: [ binary ]
   def words_of_length(len) do
-    GenServer.call(@me, {:words_of_length})
+    GenServer.call(@me, {:words_of_length, len})
   end
 
 
-  defp handle_call({:random_word}, _from, _state) do
+  def handle_call({:random_word}, _from, _state) do
+    IO.puts "NOT HERE THOUGH"
     { :reply,
       word_list
       |> Enum.random
@@ -44,7 +46,7 @@ defmodule Hangman.Dictionary do
     }
   end
 
-  defp handle_call({:words_of_length}, _from, _state) do
+  def handle_call({:words_of_length, len}, _from, _state) do
     { :reply,
       word_list
       |> Stream.map(&String.trim/1)

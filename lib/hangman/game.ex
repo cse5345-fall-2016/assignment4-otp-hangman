@@ -1,4 +1,36 @@
+defmodule Hangman.GameHandler do
+
+  @me __MODULE__
+
+  use GenServer
+
+  def start_link(name) do
+    IO.puts "HERE"
+    GenServer.start_link(__MODULE__, @me, name: name)
+  end
+
+  def init(start_arguments) do
+    IO.puts "HERE2"
+    state = Hangman.Game.new_game()
+    {:ok, state}
+  end
+
+  def make_move(letter) do
+    GenServer.cast(@me, {:guess, letter})
+  end
+
+  def handle_cast({:guess, letter}, state) do
+    state = Hangman.Game.make_move(state, letter)
+    {:ok, state}
+  end
+
+end
+
+
+
 defmodule Hangman.Game do
+
+  def handle_call()
 
   @moduledoc """
 
@@ -107,7 +139,7 @@ Here's this module being exercised from an iex session:
 
     iex(13)> { game, state, guess } = G.make_move(game, "b")
     . . .
-    iex(14)> state                                          
+    iex(14)> state
     :bad_guess
 
     iex(15)> { game, state, guess } = G.make_move(game, "f")
