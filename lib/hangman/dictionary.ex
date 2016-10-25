@@ -43,11 +43,11 @@ defmodule Hangman.Dictionary do
   def init(args), do: { :ok, args }
 
   def handle_call { :random_word }, _from, list do
-    { :reply, list |> random_word, list }
+    { :reply, list |> priv_random_word, list }
   end
 
   def handle_call { :words_of_length, length }, _from, list do
-    { :reply, list |> words_of_length(length), list }
+    { :reply, list |> priv_words_of_length(length), list }
   end
 
   ###########################
@@ -60,13 +60,13 @@ defmodule Hangman.Dictionary do
     |> IO.stream(:line)
   end
 
-  defp random_word do
+  defp priv_random_word(list) do
     list
     |> Enum.random
     |> String.trim
   end
 
-  defp words_of_length(len) do
+  defp priv_words_of_length(list, len) do
     list
     |> Stream.map(&String.trim/1)
     |> Enum.filter(&(String.length(&1) == len))
