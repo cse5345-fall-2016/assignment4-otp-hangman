@@ -15,10 +15,6 @@ defmodule Hangman.GameServer do
 
 	# Game Server API Implementation (as defined in Game.ex)
 
-	def new_game(word \\ Hangman.Dictionary.random_word) do
-		GenServer.cast @me, { :newGame, word }
-	end
-
 	def make_move(guess) do
 		GenServer.call(@me, { :make_move, guess })
 	end
@@ -37,6 +33,11 @@ defmodule Hangman.GameServer do
 
 	def word_as_string(reveal \\ false) do
 		GenServer.call(@me, { :word, reveal })
+	end
+
+	# Didn't think I needed to redefine this as part of the server, however I get errors if it isnt defined
+	def new_game(word \\ Hangman.Dictionary.random_word) do
+		GenServer.cast @me, { :newGame, word }
 	end
 
 	def crash(exit_code) do
@@ -71,7 +72,8 @@ defmodule Hangman.GameServer do
 		{:reply, Hangman.Game.word_as_string(state, reveal), state}
 	end
 
-	def handle_cast({ :new_game, word }, _from, state) do
+	# Do not need state, so use _state instead
+	def handle_cast({ :new_game, word }, _from, _state) do
 		{:no_reply, Hangman.Game.new_game(word)}
 	end
 
