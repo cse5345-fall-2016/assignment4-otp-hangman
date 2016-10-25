@@ -4,21 +4,18 @@ defmodule Hangman.GameServer do
 
 	@me :game_server
 
-	alias Hangman.Game, as: Game
-	alias Hangman.Dictionary, as: Dictionary
-
 	def start_link do
-		GenServer.start_link(__MODULE__, Game.new_game, name: @me)
+		GenServer.start_link(__MODULE__, Hangman.Game.new_game, name: @me)
 	end
 
 	def start_link(word) do
-		GenServer.start_link(__MODULE__, Game.new_game(word), name: @me)
+		GenServer.start_link(__MODULE__, Hangman.Game.new_game(word), name: @me)
 	end
 
 
 	# Game Server API Implementation (as defined in Game.ex)
 
-	def new_game(word \\ Dictionary.random_word) do
+	def new_game(word \\ Hangman.Dictionary.random_word) do
 		GenServer.cast @me, { :newGame, word }
 	end
 
@@ -54,24 +51,28 @@ defmodule Hangman.GameServer do
 	end
 
 	def handle_call({ :make_move, guess }, _from, state) do
-		{ updated_state, status, _guess } = Game.make_move(state, guess)
+		{ updated_state, status, _guess } = Hangman.Game.make_move(state, guess)
 		{:reply, status, updated_state}
 	end
 
 	def handle_call({ :word_length }, _from, state) do
-		{:reply, Game.word_length(state), state}
+		{:reply, Hangman.Game.word_length(state), state}
 	end
 
 	def handle_call({ :letters_used }, _from, state) do
-		{:reply, Game.letters_used_so_far(state), state}
+		{:reply, Hangman.Game.letters_used_so_far(state), state}
+	end
+
+	def handle_call({ :turns_left }, _from, state) do
+		{:reply, Hangman.Game.turns_left(state), state}
 	end
 
 	def handle_call({ :word_as_string, reveal }, _from, state) do
-		{:reply, Game.word_as_string(state, reveal), state}
+		{:reply, Hangman.Game.word_as_string(state, reveal), state}
 	end
 
 	def handle_cast({ :new_game, word }, _from, state) do
-		{:no_reply, Game.new_game(word)}
+		{:no_reply, Hangman.Game.new_game(word)}
 	end
 
 	def handle_cast({ :crash, exit_code }, _from, state) do
