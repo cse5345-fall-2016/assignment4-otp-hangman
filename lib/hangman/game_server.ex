@@ -52,7 +52,7 @@ defmodule Hangman.GameServer do
 	end
 
 	def handle_call({ :make_move, guess }, _from, state) do
-		{ updated_state, status, _guess } = Hangman.Game.make_move(state, guess)
+		{ updated_state, status, _ } = Hangman.Game.make_move(state, guess)
 		{:reply, status, updated_state}
 	end
 
@@ -72,7 +72,7 @@ defmodule Hangman.GameServer do
 		{:reply, Hangman.Game.word_as_string(state, reveal), state}
 	end
 
-	# Do not need state, so use _state instead
+	# Do not need state for this call, so use _state instead
 	def handle_cast({ :new_game, word }, _from, _state) do
 		{:no_reply, Hangman.Game.new_game(word)}
 	end

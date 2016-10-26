@@ -60,6 +60,7 @@ defmodule Hangman.Dictionary do
     |> IO.stream(:line)
   end
 
+  # Leaving these functions as private to separate logic out of server implementation section
   defp priv_random_word(list) do
     list
     |> Enum.random
