@@ -52,6 +52,8 @@ defmodule Hangman.GameServer do
 	end
 
 	def handle_call({ :make_move, guess }, _from, state) do
+		# Status here is :won, :lost, :good_guess or :bad_guess
+		# Guess is the third param returned but is not needed
 		{ updated_state, status, _ } = Hangman.Game.make_move(state, guess)
 		{:reply, status, updated_state}
 	end
