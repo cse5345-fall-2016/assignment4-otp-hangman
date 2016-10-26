@@ -1,0 +1,7 @@
+To get started...
+Make changes in mix.exs and lib/hangman.ex
+
+OR
+
+Create a temp file and do
+mix new --sup hangman

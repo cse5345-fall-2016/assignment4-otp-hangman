@@ -11,13 +11,19 @@ defmodule Hangman do
 
     # Uncomment and complete this:
 
-    # import Supervisor.Spec, warn: false
-    # 
-    # children = [
-    # ]
-    # 
-    # opts = [strategy: :you_choose_a_strategy, name: Hangman.Supervisor]
-    # Supervisor.start_link(children, opts)
+    import Supervisor.Spec, warn: false
+    
+    # COME BACK TO THIS
+    children = [
+      worker(Hangman.Dictionary, [], restart: :permanent),
+      supervisor(Hangman.SubSupervisor, [], restart: :transient)
+    ]
+
+    # Game is transient and should be handled one for one.
+    # Dictionary is permanent and should be handled one for all.
+
+    opts = [strategy: :one_for_all, name: Hangman.Supervisor]
+    Supervisor.start_link(children, opts)
   end
 end
 

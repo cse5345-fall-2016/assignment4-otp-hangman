@@ -1,4 +1,40 @@
 defmodule Hangman.Dictionary do
+  use GenServer
+
+  @me :dictionary
+
+  #######
+  # API #
+  #######
+
+  def start_link(default \\ []) do
+    GenServer.start_link(__MODULE__, default, name: @me)
+  end
+
+  def set(key, value) do
+    GenServer.cast(@me, {:set, key, value})
+  end
+
+  def get(key) do
+    GenServer.call(@me, {:get, key})
+  end
+
+  #########################
+  # Server Implementation #
+  #########################
+
+  def init(args) do
+    {:ok, Enum.into(args, %{})}
+  end
+
+  def handle_cast({:set, key, value}, state) do
+    {:noreply, Map.put(state, key, value)}
+  end
+
+  def handle_call({:get, key}, _from, state) do
+    {:reply, state[key], state}
+  end
+
 
   @moduledoc """
   We act as an interface to a wordlist (whose name is hardwired in the
@@ -30,7 +66,6 @@ defmodule Hangman.Dictionary do
     |> Stream.map(&String.trim/1)
     |> Enum.filter(&(String.length(&1) == len))
   end
-
 
   ###########################
   # End of public interface #
