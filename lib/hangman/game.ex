@@ -147,22 +147,6 @@ Here's this module being exercised from an iex session:
   This is used by the unit tests.
   """
 
-  def start_link(default \\ []) do
-    GenServer.start_link(__MODULE__, default,name: :game)
-  end
-
-  def init(args) do
-    { :ok, Enum.into(args, %{}) }
-  end
-
-  def handle_call({:make_move, guess},_from,state) do
-    {:reply, make_move(state,guess), state}
-  end
-
-  def handle_call({ :letters_used },_from,state) do
-    {:reply, letters_used_so_far(state), state}
-  end
-
 
   @spec new_game(binary) :: state
   def new_game(word \\ Hangman.Dictionary.random_word) do
