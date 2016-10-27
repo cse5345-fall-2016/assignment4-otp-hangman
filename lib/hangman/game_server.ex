@@ -1,16 +1,43 @@
 defmodule Hangman.GameServer do
 
+  use GenServer
+
   #######################
   #         API         #
   #######################
 
-
-  import Supervisor.Spec, warn: false
-  use GenServer
-
   def start_link(opts \\ []) do
     GenServer.start_link(__MODULE__,opts,name: :game)
   end
+
+  def make_move(guess) do
+    GenServer.call(:game,{:make_move,guess})
+  end
+
+  def letters_used_so_far() do
+    GenServer.call(:game,{:letters_used})
+  end
+
+  def turns_left() do
+    GenServer.call(:game,{:turns_left})
+  end
+
+  def word_as_string(reveal \\ false) do
+    GenServer.call(:game,{:word_as_string, reveal})
+  end
+
+  def word_length() do
+    GenServer.call(:game,{:word_length})
+  end
+
+  def crash(reason \\ :normal) do
+    GenServer.stop(:game,reason)
+  end
+
+  #######################
+  #   IMPLEMENTATION    #
+  #######################
+
 
   def init([]) do
     { :ok,   GenServer.call(:dictionary,{:get_word})
@@ -41,30 +68,6 @@ defmodule Hangman.GameServer do
 
   def handle_call({:word_length},_from,state) do
     {:reply,  Hangman.Game.word_length(state), state}
-  end
-
-  def make_move(guess) do
-    GenServer.call(:game,{:make_move,guess})
-  end
-
-  def letters_used_so_far() do
-    GenServer.call(:game,{:letters_used})
-  end
-
-  def turns_left() do
-    GenServer.call(:game,{:turns_left})
-  end
-
-  def word_as_string(reveal \\ false) do
-    GenServer.call(:game,{:word_as_string, reveal})
-  end
-
-  def word_length() do
-    GenServer.call(:game,{:word_length})
-  end
-
-  def crash(reason \\ :normal) do
-    GenServer.stop(:game,reason)
   end
 
 end
