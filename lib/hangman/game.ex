@@ -2,6 +2,8 @@ defmodule Hangman.Game do
 
   @moduledoc """
 
+  use GenServer
+
   This is the backend for a Hangman game. It manages the game state.
   Clients make moves, and this code validates them and reports back
   the updated state.
@@ -144,6 +146,7 @@ Here's this module being exercised from an iex session:
   If a paramter is supplied, it is used instead of a random word.
   This is used by the unit tests.
   """
+
 
   @spec new_game(binary) :: state
   def new_game(word \\ Hangman.Dictionary.random_word) do

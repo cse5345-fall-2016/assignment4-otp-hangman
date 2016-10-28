@@ -1,10 +1,35 @@
 defmodule Hangman.Dictionary do
+  @moduledoc false
 
-  @moduledoc """
-  We act as an interface to a wordlist (whose name is hardwired in the
-  module attribute `@word_list_file_name`). The list is formatted as
-  one word per line.
-  """
+  @me :dictionary
+
+  use GenServer
+
+
+  #######################
+  #         API         #
+  #######################
+
+
+  def start_link(opts \\ []) do
+    GenServer.start_link(__MODULE__,opts,name: @me)
+  end
+
+  def get_word() do
+    GenServer.call(@me,{ :get_word })
+  end
+
+  def init(args) do
+    { :ok, Enum.into(args, %{}) }
+  end
+
+  def handle_call({ :get_word }, _from, state) do
+    {:reply, random_word(), state}
+  end
+
+  #######################
+  #    Implementation   #
+  #######################
 
   @word_list_file_name "assets/words.8800"
 
@@ -31,15 +56,10 @@ defmodule Hangman.Dictionary do
     |> Enum.filter(&(String.length(&1) == len))
   end
 
-
-  ###########################
-  # End of public interface #
-  ###########################
-
   defp word_list do
     @word_list_file_name
     |> File.open!
     |> IO.stream(:line)
   end
-
+  
 end
