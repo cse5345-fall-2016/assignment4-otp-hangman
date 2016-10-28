@@ -5,12 +5,11 @@ defmodule Hangman.GameSupervisor do
     import Supervisor.Spec, warn: false
 
     children = [
-      worker(Hangman.Dictionary, []),
       worker(Hangman.GameServer, [], restart: :transient)
     ]
 
     opts = [
-      strategy: :rest_for_one,
+      strategy: :one_for_one,
       name: Hangman.GameSupervisor
     ]
 

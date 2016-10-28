@@ -4,7 +4,7 @@ defmodule Hangman.GameServer do
   alias Hangman.Game, as: Impl
   @me :gameserver
 
-  def start_link(default \\ []) do
+  def start_link(default \\ "") do
     GenServer.start_link(__MODULE__, default, name: @me)
   end
 
@@ -36,8 +36,17 @@ defmodule Hangman.GameServer do
   # Server Implemention #
   #######################
 
-  def init(args) do
-    { :ok, Impl.new_game(to_string args) }
+  def init(word) do
+    word |> to_string
+    is_empty_word = String.strip(word) == ""
+
+    new_game =
+      case is_empty_word do
+      true  -> Impl.new_game()
+      false -> Impl.new_game(word)
+    end
+
+    { :ok, new_game  }
   end
 
   def handle_call({ :make_move, guess }, _from, state) do
