@@ -5,8 +5,11 @@ defmodule Hangman.GameServer do
   use GenServer
 
   def start_link(word \\ Hangman.Dictionary.random_word) do
-    IO.puts "Here is start link arg #{word}"
     GenServer.start_link(__MODULE__, word, name: @me)
+  end
+
+  def new_game(word \\ Hangman.Dictionary.random_word) do
+    GenServer.cast(@me, {:new_game, word})
   end
 
   def word_length do
@@ -26,13 +29,16 @@ defmodule Hangman.GameServer do
   end
 
   def make_move(letter) do
-    GenServer.cast(@me, {:guess, letter})
+    GenServer.call(@me, {:guess, letter})
+  end
+
+  def crash(reason) do
+    GenServer.cast(@me, {:crash, reason})
   end
 
   # imple
 
   def init(word) do
-    IO.puts "Here are the init args #{word}"
     {
       :ok,
       Hangman.Game.new_game(word)
@@ -40,7 +46,6 @@ defmodule Hangman.GameServer do
   end
 
   def handle_call({:word_length}, _from, state) do
-    IO.puts "WORD LENGTH JHBSJHGAJHGAJDSHGSJH"
     {
       :reply,
       Hangman.Game.word_length(state),
@@ -57,7 +62,6 @@ defmodule Hangman.GameServer do
   end
 
   def handle_call({:turns_left}, _from, state) do
-    IO.puts "TURNS LEFT"
     {
       :reply,
       Hangman.Game.turns_left(state),
@@ -73,11 +77,21 @@ defmodule Hangman.GameServer do
     }
   end
 
-  def handle_cast({:guess, letter}, state) do
+  def handle_call({:guess, letter}, _from, state) do
+    {new_state, reply_status, _word} = Hangman.Game.make_move(state, letter)
     {
-      :noreply,
-      Hangman.Game.make_move(state, letter),
+      :reply,
+      reply_status,
+      new_state
     }
+  end
+
+  def handle_cast({:new_game, word}, _state) do
+    {:noreply, Hangman.Game.new_game(word)}
+  end
+
+  def handle_cast({:crash, reason}, state) do
+    {:stop, reason, state}
   end
 
 

@@ -42,7 +42,6 @@ defmodule Hangman.Dictionary do
 
 
   def handle_call({:random_word}, _from, state) do
-    IO.puts "RANDOM WORD"
     { :reply,
       word_list
       |> Enum.random
