@@ -28,20 +28,21 @@ defmodule Hangman.GameServer do
     GenServer.call(@me, { :word_as_string, reveal })
   end
 
+  def crash(reason) do
+    GenServer.cast(@me, { :crash, reason })
+  end
+
   #######################
   # Server Implemention #
   #######################
 
-  def init(_args) do
-    { :ok, Impl.new_game() }
+  def init(args) do
+    { :ok, Impl.new_game(to_string args) }
   end
 
   def handle_call({ :make_move, guess }, _from, state) do
-    {state, status, _guess} = Impl.make_move(state, guess)
+    { state, status, _guess} = Impl.make_move(state, guess)
     { :reply, status, state }
-
-    #tuple = Impl.make_move(state, guess)
-    #{ :reply, elem(tuple, 1), elem(tuple, 0) }
   end
 
   def handle_call({ :word_length }, _from, state) do
@@ -58,6 +59,10 @@ defmodule Hangman.GameServer do
 
   def handle_call({ :word_as_string, reveal }, _from, state) do
     { :reply, Impl.word_as_string(state, reveal), state }
+  end
+
+  def handle_cast({ :crash, reason }, state) do
+    { :stop, reason, state }
   end
 
 end
