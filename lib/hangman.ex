@@ -14,7 +14,7 @@ defmodule Hangman do
     import Supervisor.Spec, warn: false
     
     children = [
-      worker(Hangman.Dictionary, []), 
+      worker(Hangman.Dictionary, [], restart: :permanent), 
       supervisor(Hangman.SubSupervisor, [])
     ]
     

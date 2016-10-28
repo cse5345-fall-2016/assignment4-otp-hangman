@@ -4,7 +4,7 @@ defmodule Hangman.GameServer do
 
   def start_link(word \\ Hangman.Dictionary.random_word) do
     state = Game.new_game(word)
-    {:ok,_pid} = GenServer.start_link( __MODULE__, state, name: __MODULE__)
+    GenServer.start_link( __MODULE__, state, name: __MODULE__)
   end
 
   def make_move(guess) do 
