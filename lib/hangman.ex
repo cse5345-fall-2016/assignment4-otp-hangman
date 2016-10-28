@@ -4,6 +4,9 @@ defmodule Hangman do
   @moduledoc """
 
   Write your description of your supervision scheme here...
+  
+  Name: Ephraim Wickline
+  SID:28176178
 
   The way I chose to layout my supervision scheme is by having the hangman supervisor 
   look over the dictionary server and the game supervisor. The dictionary server restart 
