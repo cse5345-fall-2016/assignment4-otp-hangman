@@ -11,6 +11,7 @@ defmodule GameTest do
       :ok
     end
 
+    @tag :wip
     test "return the length" do
       assert Game.word_length == 6
     end
@@ -164,5 +165,5 @@ defmodule GameTest do
         nil
     end
   end
-  
+
 end

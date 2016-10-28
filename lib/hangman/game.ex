@@ -1,36 +1,4 @@
-defmodule Hangman.GameHandler do
-
-  @me __MODULE__
-
-  use GenServer
-
-  def start_link(name) do
-    IO.puts "HERE"
-    GenServer.start_link(__MODULE__, @me, name: name)
-  end
-
-  def init(start_arguments) do
-    IO.puts "HERE2"
-    state = Hangman.Game.new_game()
-    {:ok, state}
-  end
-
-  def make_move(letter) do
-    GenServer.cast(@me, {:guess, letter})
-  end
-
-  def handle_cast({:guess, letter}, state) do
-    state = Hangman.Game.make_move(state, letter)
-    {:ok, state}
-  end
-
-end
-
-
-
 defmodule Hangman.Game do
-
-  def handle_call()
 
   @moduledoc """
 

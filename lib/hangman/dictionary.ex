@@ -7,13 +7,13 @@ defmodule Hangman.Dictionary do
   """
 
   @word_list_file_name "assets/words.8800"
-  @me __MODULE__
+  @me :dictionary
 
   use GenServer
 
   ###API
-  def start_link(name) do
-    GenServer.start_link(__MODULE__, @me, name: name)
+  def start_link(default \\ []) do
+    GenServer.start_link(__MODULE__, default, name: @me)
   end
 
   @doc """
@@ -23,7 +23,6 @@ defmodule Hangman.Dictionary do
 
   @spec random_word() :: binary
   def random_word do
-    IO.inspect @me
     GenServer.call(@me, {:random_word})
   end
 
@@ -37,20 +36,27 @@ defmodule Hangman.Dictionary do
   end
 
 
-  def handle_call({:random_word}, _from, _state) do
-    IO.puts "NOT HERE THOUGH"
+  def init(arg) do
+    {:ok, arg}
+  end
+
+
+  def handle_call({:random_word}, _from, state) do
+    IO.puts "RANDOM WORD"
     { :reply,
       word_list
       |> Enum.random
-      |> String.trim
+      |> String.trim,
+      state
     }
   end
 
-  def handle_call({:words_of_length, len}, _from, _state) do
+  def handle_call({:words_of_length, len}, _from, state) do
     { :reply,
       word_list
       |> Stream.map(&String.trim/1)
-      |> Enum.filter(&(String.length(&1) == len))
+      |> Enum.filter(&(String.length(&1) == len)),
+      state
     }
   end
 
