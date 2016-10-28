@@ -126,5 +126,3 @@ iex> Hangman.GameServer.word_as_string(g1)
 ~~~
 
 You'll need to update the tests accordingly.
-
-
