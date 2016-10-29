@@ -79,7 +79,7 @@ defmodule Hangman.ComputerPlayer do
   end
 
   defp load_words_of_length(len) do
-    Hangman.Dictionary.words_of_length(len)
+    Hangman.Dictionary.Server.words_of_length(len)
     |> Enum.map(&add_word_signature/1)
   end
 

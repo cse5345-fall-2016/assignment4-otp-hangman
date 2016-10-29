@@ -146,7 +146,7 @@ Here's this module being exercised from an iex session:
   """
 
   @spec new_game(binary) :: state
-  def new_game(word \\ Hangman.Dictionary.random_word) do
+  def new_game(word \\ Hangman.Dictionary.Server.random_word) do
     %{
       word:        String.codepoints(word) |> Enum.map(&{&1, false}),
       turns_left:  10,
