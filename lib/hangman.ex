@@ -13,17 +13,17 @@ defmodule Hangman do
 
     import Supervisor.Spec, warn: false
     
-    # COME BACK TO THIS
     children = [
       worker(Hangman.Dictionary, [], restart: :permanent),
-      supervisor(Hangman.SubSupervisor, [], restart: :transient)
+      supervisor(Hangman.GameServer, [], restart: :transient)
     ]
 
     # Game is transient and should be handled one for one.
-    # Dictionary is permanent and should be handled one for all.
+    # Dictionary is permanent and should be handled rest for one because one for all will kill ALL parts of the tree.
+    # Rest for one kills the problem child and subsequent children.
 
-    opts = [strategy: :one_for_all, name: Hangman.Supervisor]
-    Supervisor.start_link(children, opts)
+    opts = [strategy: :rest_for_one, name: Hangman.Supervisor]
+    {:ok, _pid} = Supervisor.start_link(children, opts)
   end
 end
 

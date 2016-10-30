@@ -285,3 +285,7 @@ Here's this module being exercised from an iex session:
     Enum.all?(word, fn {_ch, ok } -> ok end)
   end
 end
+
+defmodule Hangman.GameServer do
+
+end

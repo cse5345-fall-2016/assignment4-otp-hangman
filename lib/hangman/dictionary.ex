@@ -46,10 +46,6 @@ defmodule Hangman.Dictionary do
     {:ok, Enum.into(args, %{})}
   end
 
-  def handle_cast({:set, key, value}, state) do
-    {:noreply, Map.put(state, key, value)}
-  end
-
   def handle_call(:random, _from, state) do
     {:reply, word_list
              |> Enum.random
