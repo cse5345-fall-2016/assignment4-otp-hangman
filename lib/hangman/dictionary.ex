@@ -7,6 +7,14 @@ defmodule Hangman.Dictionary do
   """
 
   @word_list_file_name "assets/words.8800"
+  @me :dictionary
+
+  use GenServer
+
+  ###API
+  def start_link(default \\ []) do
+    GenServer.start_link(__MODULE__, default, name: @me)
+  end
 
   @doc """
   Return a random word from our word list. Whitespace and newlines
@@ -15,9 +23,7 @@ defmodule Hangman.Dictionary do
 
   @spec random_word() :: binary
   def random_word do
-    word_list
-    |> Enum.random
-    |> String.trim
+    GenServer.call(@me, {:random_word})
   end
 
   @doc """
@@ -26,9 +32,34 @@ defmodule Hangman.Dictionary do
   """
   @spec words_of_length(integer)  :: [ binary ]
   def words_of_length(len) do
-    word_list
-    |> Stream.map(&String.trim/1)
-    |> Enum.filter(&(String.length(&1) == len))
+    GenServer.call(@me, {:words_of_length, len})
+  end
+
+
+  def init(_arg) do
+    {
+      :ok,
+      word_list
+    }
+  end
+
+
+  def handle_call({:random_word}, _from, state) do
+    { :reply,
+      state
+      |> Enum.random
+      |> String.trim,
+      state
+    }
+  end
+
+  def handle_call({:words_of_length, len}, _from, state) do
+    { :reply,
+      state
+      |> Stream.map(&String.trim/1)
+      |> Enum.filter(&(String.length(&1) == len)),
+      state
+    }
   end
 
 

@@ -164,5 +164,5 @@ defmodule GameTest do
         nil
     end
   end
-  
+
 end
