@@ -8,7 +8,7 @@ defmodule Hangman do
   Dictionary Server. We need to use the ":one_for_all" strategy here because
   once the Dictionary Server is down, all processes will be terminate. The
   restart strategy is ":permanent". This strategy will always restart the child
-  process. So not matter what exit reason is, the worker will always restart.
+  process.
   2. Another supervisor for Game Server is stored in the "supevisor.ex" file.
   This supervisor is a sub-supervisor of the root supervisor.
   Its child server(worker) is Game Server. We need to use the ":one_for_one"
