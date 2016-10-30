@@ -23,7 +23,7 @@ end
 defmodule GameSup.SubSupervisor do
     use Supervisor
     def start_link() do
-        {:ok, _pid} = Supervisor.start_link(__MODULE__)
+        {:ok, _pid} = Supervisor.start_link()
     end
     
     def init(_args) do

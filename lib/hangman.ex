@@ -11,7 +11,8 @@ defmodule Hangman do
      
     children = [
         worker(Hangman.Dictionary.Server, []),
-        supervisor(GameSup, [])
+        #worker(Hangman.GameServer, [])
+        #supervisor(GameSup.Supervisor, [])
     ]
     
     opts = [strategy: :one_for_all, name: Hangman.Supervisor]
