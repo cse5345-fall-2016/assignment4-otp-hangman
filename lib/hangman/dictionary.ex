@@ -9,7 +9,7 @@ defmodule Hangman.Dictionary do
 
   @word_list_file_name "assets/words.8800"
 
-
+  
   def start_link(words \\ []) do
     GenServer.start(__MODULE__, words, name: :dictionary)
   end

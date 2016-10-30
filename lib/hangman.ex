@@ -20,23 +20,11 @@ defmodule Hangman do
   """
 
   def start(_type, _args) do
-
-    # Uncomment and complete this:
-
-    # import Supervisor.Spec, warn: false
-    #
-    # children = [
-    # ]
-    #
-    # opts = [strategy: :you_choose_a_strategy, name: Hangman.Supervisor]
-    # Supervisor.start_link(children, opts)
     import Supervisor.Spec, warn: false
-
     children = [
       worker(Hangman.Dictionary, [], restart: :permanent),
       supervisor(Hangman.GameSupervisor, [])
     ]
-
     opts = [strategy: :one_for_all, name: Hangman.GameSupervisor]
     Supervisor.start_link(children, opts)
 
