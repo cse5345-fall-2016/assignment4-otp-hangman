@@ -12,7 +12,7 @@ defmodule Hangman.Game do
 
     Set up the state for a new game, and return that state. The client
     applications will pass this state back to your code in all the
-    subsequent API calls.
+    subsequent API   calls.
 
     The state that's returned will at a minimum contain the word to be
     guessed.
@@ -178,7 +178,7 @@ Here's this module being exercised from an iex session:
   @spec make_move(state, ch) :: { state, atom, optional_ch }
   def make_move(state = %{turns_left: 0}, _) do
     { state, :lost, nil }
-  end
+  end 
 
   def make_move(state, guess) do
     { state, guess_is_correct } = score_move(state, guess)

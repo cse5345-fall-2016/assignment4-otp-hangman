@@ -1,13 +1,17 @@
 defmodule Hangman do
   use Application
+    @moduledoc """
 
+    !!! Write your description of your supervision scheme here...
+
+    """
   # See http://elixir-lang.org/docs/stable/elixir/Application.html
   # for more information on OTP Applications
-  def start(_type, _args) do
+  def start(_type, args) do
     import Supervisor.Spec, warn: false
 
     # Define workers and child supervisors to be supervised
-    children = [
+    children = [ worker(Hangman.Game, args)
       # Starts a worker by calling: Hangman.Worker.start_link(arg1, arg2, arg3)
       # worker(Hangman.Worker, [arg1, arg2, arg3]),
     ]
