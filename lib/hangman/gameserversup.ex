@@ -3,17 +3,20 @@ defmodule GameSup.SubSupervisor do
     
     @moduledoc """
 
-  Write your description of your supervision scheme here...
+  This supervisor has only one worker and since no other worker 
+  depends on this worker, if this worker fails, we would want only it to restart.
+  :one_for_one-> If this worker fails, only restart itself.
 
   """
   
     def start_link() do
-        Supervisor.start_link()
+        Supervisor.start_link(__MODULE__, :ok)
     end
     
-    def init(_args) do
-        child_processes = [ worker(Hangman.GameServer, []) ]
-        supervise child_processes, strategy: :one_for_one
+    def init(:ok) do
+        children = [ worker(Hangman.GameServer, []) ]
+        supervise(children, strategy: :one_for_one)
+        
     end
 end
 

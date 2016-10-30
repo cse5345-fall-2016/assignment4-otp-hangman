@@ -43,7 +43,7 @@ defmodule GameTest do
   describe "correct guess" do
     setup do
       start_server("wibble")
-      status = Game.make_move("b")
+      { s, status, _optional_ch } = Game.make_move("b")
       [ status: status, guess: "b" ]
     end
 
@@ -69,7 +69,7 @@ defmodule GameTest do
   describe "incorrect guess" do
     setup do
       start_server("wibble")
-      status = Game.make_move("a")
+      { s, status, _optional_ch } = Game.make_move("a")
       [ status: status, guess: "a" ]
     end
 
@@ -107,7 +107,7 @@ defmodule GameTest do
       start_server("wibble")
 
       Enum.each(@winning_states,  fn ({ guess, was, stat, left, used }) ->
-        status = Game.make_move(guess)
+        { s, status, _optional_ch } = Game.make_move(guess)
 
         assert status == stat
         assert Game.word_as_string == was
@@ -141,7 +141,7 @@ defmodule GameTest do
       start_server("wibble")
 
       Enum.each(@losing_states, fn ({ guess, was, stat, left, used }) ->
-        status = Game.make_move(guess)
+        { s, status, _optional_ch } = Game.make_move(guess)
 
         assert status == stat
         assert Game.word_as_string == was

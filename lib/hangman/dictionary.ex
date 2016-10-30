@@ -16,7 +16,7 @@ defmodule Hangman.Dictionary.Server do
   end
   
   def words_of_length(len) do
-    GenServer.cast(@me, {:words_of_length, len})
+    GenServer.call(@me, {:words_of_length, len})
   end
   
   
