@@ -11,6 +11,10 @@ defmodule Hangman.GameServer do
 	def start_link(word \\ Hangman.Dictionary.Server.random_word) do
         GenServer.start_link(__MODULE__, word, name: @me)
 	end
+    
+    def new_game()do
+        GenServer.cast(@me, {:new})
+	end
 	
 	def new_game(word)do
         GenServer.cast(@me, {:new, word})
@@ -47,6 +51,10 @@ defmodule Hangman.GameServer do
 	def init(word)do 
         { :ok, Impl.new_game(word)}
 	end
+    
+    def handle_cast({:new}, state)do
+        { :noreply, Impl.new_game()} 
+	end
 	
 	def handle_cast({:new, word}, state)do
         { :noreply, Impl.new_game(word)} 
@@ -58,7 +66,7 @@ defmodule Hangman.GameServer do
     
 	def handle_call({:move, guess}, _from, state)do
         { s, a, _optional_ch } = Impl.make_move(state, guess)
-        { :reply, a, s}
+        { :reply, Impl.make_move(state, guess), s}
 	end
 	
 	def handle_call({:length}, _from, state)do

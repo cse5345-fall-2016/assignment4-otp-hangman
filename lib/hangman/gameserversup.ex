@@ -8,7 +8,7 @@ defmodule GameSup.SubSupervisor do
   """
   
     def start_link() do
-        {:ok, _pid} = Supervisor.start_link()
+        Supervisor.start_link()
     end
     
     def init(_args) do

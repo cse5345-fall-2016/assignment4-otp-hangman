@@ -12,7 +12,7 @@ defmodule Hangman.Dictionary.Server do
 	end
   
   def random_word do
-    GenServer.cast(@me, { :random})
+    GenServer.call(@me, { :r_w})
   end
   
   def words_of_length(len) do
@@ -28,32 +28,20 @@ defmodule Hangman.Dictionary.Server do
     { :ok, Enum.into(args, %{})}
   end
   
-  @moduledoc """
-  We act as an interface to a wordlist (whose name is hardwired in the
-  module attribute `@word_list_file_name`). The list is formatted as
-  one word per line.
-  """
-
+  
   @word_list_file_name "assets/words.8800"
 
-  @doc """
-  Return a random word from our word list. Whitespace and newlines
-  will have been removed.
-  """
-
+  
   @spec random_word() :: binary
-  def handle_call({:random}, _from, state)do
-    { 
+  def handle_call({ :r_w}, _from, state)do
+    {
     :reply,
-    word_list |> Enum.random |> String.trim, 
+    (word_list |> Enum.random |> String.trim), 
     state
     }
   end
 
-  @doc """
-  Return a list of all the words in our word list of a given length.
-  Whitespace and newlines will have been removed.
-  """
+  
   @spec words_of_length(integer)  :: [ binary ]
   
   def handle_call({:words_of_length, len}, state) do
