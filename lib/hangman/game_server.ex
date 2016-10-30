@@ -1,8 +1,7 @@
 defmodule Hangman.GameServer do
   @moduledoc false
   use GenServer
-
-  def start_link(current_word) do
+  def start_link(current_word\\Hangman.Dictionary.random_word) do
     game = Hangman.Game.new_game(current_word)
     GenServer.start_link(__MODULE__, game, name: :gameServer, debug: [:trace,:statistics])
   end
@@ -10,6 +9,10 @@ defmodule Hangman.GameServer do
  
   ###################
   # External API
+
+  def new_game(current_word\\Hangman.Dictionary.random_word) do
+    GenServer.cast(:gameServer, {:new_game, current_word})
+  end
 
   def word_length do
     GenServer.call :gameServer, :word_length
@@ -19,7 +22,7 @@ defmodule Hangman.GameServer do
     GenServer.call :gameServer, {:word_as_string, flag}
   end
 
-  def make_move(guess) do
+  def make_move(:ok, guess) do
     GenServer.call :gameServer, {:make_move, guess}
   end
 
@@ -33,6 +36,10 @@ defmodule Hangman.GameServer do
 
    ###################
    # GenServer implementation
+
+   def handle_cast({:new_game, current_word}, _from) do
+     { :noreply, Hangman.Game.new_game(current_word)}
+   end
 
   def handle_call(:word_length, _from, game) do
     { :reply, Hangman.Game.word_length(game), game }

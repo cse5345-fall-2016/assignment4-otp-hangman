@@ -5,13 +5,13 @@ defmodule Hangman.Dictionary do
     ###################
     # External API
 
-#    def start_link(default) do
-#       IO.puts("start link")
-#      GenServer.start_link(__MODULE__, default, name: :dictionary)
-#    end
+    def start_link(default) do
+       IO.puts("start link")
+      GenServer.start_link(__MODULE__, default, name: :dictionary)
+    end
 
 #    def random_word do
-#      IO.puts "random words "
+#    #  IO.puts "random words "
 #      GenServer.call :dictionary, :random_word
 #    end
 #

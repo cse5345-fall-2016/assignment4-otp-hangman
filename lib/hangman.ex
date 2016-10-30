@@ -1,5 +1,5 @@
 defmodule Hangman do
-  use Application
+  use Application,Supervisor
 
   @moduledoc """
 
@@ -11,13 +11,15 @@ defmodule Hangman do
 
     # Uncomment and complete this:
 
-    # import Supervisor.Spec, warn: false
-    # 
-    # children = [
-    # ]
-    # 
-    # opts = [strategy: :you_choose_a_strategy, name: Hangman.Supervisor]
-    # Supervisor.start_link(children, opts)
+     import Supervisor.Spec, warn: false
+
+     children = [
+        worker(Hangman.Dictionary,["shashi"]),
+        supervisor(Hangman.GameSupervisor, [])
+     ]
+    # opts = [strategy: :one_for_one, name: Hangman.Supervisor]
+     opts = [strategy: :one_for_one, name: Hangman.Supervisor]
+     Supervisor.start_link(children, opts)
   end
 end
 
