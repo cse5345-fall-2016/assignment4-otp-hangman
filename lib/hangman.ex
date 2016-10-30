@@ -3,7 +3,10 @@ defmodule Hangman do
 
   @moduledoc """
 
-  Write your description of your supervision scheme here...
+  Because the GameServer worker depends on the dictionary
+  worker, we will use the :one_for_all strategy. That way,
+  if the dictionary worker goes down, the gameserver worker
+  will be restarted also.
 
   """
 
@@ -11,13 +14,15 @@ defmodule Hangman do
 
     # Uncomment and complete this:
 
-    # import Supervisor.Spec, warn: false
-    # 
-    # children = [
-    # ]
-    # 
-    # opts = [strategy: :you_choose_a_strategy, name: Hangman.Supervisor]
-    # Supervisor.start_link(children, opts)
+    import Supervisor.Spec, warn: false
+
+    children = [
+      worker(Hangman.Dictionary, []),
+      worker(Hangman.GameServer, [])
+    ]
+
+    opts = [strategy: :one_for_all , name: Hangman.Supervisor]
+    Supervisor.start_link(children, opts)
   end
 end
 
