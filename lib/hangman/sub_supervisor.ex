@@ -9,7 +9,7 @@ defmodule Hangman.SubSupervisor do
     children = [
       worker(Hangman.GameServer, [], restart: :transient)
     ]
-
+    
     supervise(children, strategy: :one_for_one)
   end
 

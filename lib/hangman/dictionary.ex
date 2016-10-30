@@ -16,7 +16,7 @@ defmodule Hangman.Dictionary do
 
   @spec random_word() :: binary
   def random_word do
-    GenServer.call __MODULE__, :random_word
+    GenServer.call(__MODULE__, :random_word)
   end
 
   @doc """
@@ -25,7 +25,7 @@ defmodule Hangman.Dictionary do
   """
   @spec words_of_length(integer)  :: [ binary ]
   def words_of_length(len) do
-    GenServer.call __MODULE__, { :words_of_length, len }
+    GenServer.call(__MODULE__, { :words_of_length, len })
   end
 
   def start_link() do

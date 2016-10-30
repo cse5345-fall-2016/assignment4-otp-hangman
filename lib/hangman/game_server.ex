@@ -4,31 +4,31 @@ defmodule Hangman.GameServer do
 
   def start_link(word \\ Hangman.Dictionary.random_word) do
     state = Game.new_game(word)
-    GenServer.start_link( __MODULE__, state, name: __MODULE__)
+    GenServer.start_link(__MODULE__, state, name: __MODULE__)
   end
 
   def make_move(guess) do 
-    GenServer.call __MODULE__, { :make_move, guess }
+    GenServer.call(__MODULE__, { :make_move, guess })
   end
 
   def word_length do 
-    GenServer.call __MODULE__, :word_length
+    GenServer.call(__MODULE__, :word_length)
   end
 
   def letters_used_so_far do 
-    GenServer.call __MODULE__, :letters_used_so_far
+    GenServer.call(__MODULE__, :letters_used_so_far)
   end 
 
   def turns_left do 
-    GenServer.call __MODULE__, :turns_left
+    GenServer.call(__MODULE__, :turns_left)
   end
 
   def word_as_string(reveal \\ false) do 
-    GenServer.call __MODULE__, { :word_as_string, reveal }
+    GenServer.call(__MODULE__, { :word_as_string, reveal })
   end
 
   def crash(reason) do 
-    GenServer.cast __MODULE__, { :crash, reason }
+    GenServer.cast(__MODULE__, { :crash, reason })
   end
 
   #######################  
@@ -36,7 +36,7 @@ defmodule Hangman.GameServer do
   #######################
 
   def handle_call({ :make_move, guess }, _from, state) do 
-    {new_state, status, _ch} = Game.make_move state, guess
+    {new_state, status, _ch} = Game.make_move(state, guess)
     { :reply, status, new_state }
   end
 
