@@ -1,14 +1,19 @@
-defmodule Hangman.GameServer do
+defmodule Hangman.GameServer do	
 	use GenServer 
-	@me: game_server
+	@me :game_server
 	######################
 	# API implementation #
 	######################
 	def start_link do
-		GenServer.start_link(__MODULE__, Hangman.Game.new_game, name: @me)
+		GenServer.start_link(__MODULE__, GenServer.call(:dictionary, :random_word), name: @me)
 	end 
 	def start_link(word) do
-		GenServer.start_link(__MODULE__, Hangman.Game.new_game(word), name: @me)
+		GenServer.start_link(__MODULE__, word, name: @me)
+	end
+	
+	#Initialize game state#
+	def init(word) do
+		{:ok, Hangman.Game.new_game(word)}
 	end
 
 	def make_move(guess) do
@@ -32,42 +37,38 @@ defmodule Hangman.GameServer do
 	end
 
 	def crash(cause) do
-		GenServer.stop @me, {:crash, cause}
+		GenServer.stop(@me, cause)
 	end
 
 	############################
 	# GenServer implementation #
 	############################
 
-	#Initialize game state#
-	def init(state) do
-		{:ok, state}
+	def handle_call({ :make_move, guess}, _from, state) do
+		{new_state, status, _}=Hangman.Game.make_move(state, guess)
+		{:reply, status, new_state}
 	end
 
-	def handle_call({:make_move, guess},_from,state) do
-		{new_state, report, _}=Hangman.Game.make_move(state, guess)
-		{:reply, report, new_state}
+	def handle_call({ :word_as_string, reveal}, _from, state) do
+		{:reply, Hangman.Game.word_as_string(state, reveal), state}
 	end
 
-	def handle_call({:word_as_string}, reveal},_from,state) do
-		{:reply, Hangman.Game.word_as_string(state,reaveal), state}
-	end
-
-	def handle_call({:word_length},_from,state) do
+	def handle_call({ :word_length}, _from, state) do
 		{:reply, Hangman.Game.word_length(state), state}
 	end
 
-	def handle_call({:turns_left},_from,state) do
+	def handle_call({ :turns_left}, _from, state) do
 		{:reply, Hangman.Game.turns_left(state), state}
 	end
 
-	def handle_call({:letters_used_so_far},_from,state) do
+	def handle_call({ :letters_used_so_far}, _from, state) do
 		{:reply, Hangman.Game.letters_used_so_far(state), state}
 	end
 
-	def handle_call({:crash, cause},state) do
+	def handle_call({ :crash, cause}, state) do
 		{:stop, cause, state}
 	end
-ends
+
+end
 
 
