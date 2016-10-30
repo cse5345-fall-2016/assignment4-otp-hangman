@@ -1,4 +1,15 @@
 defmodule Hangman.Dictionary do
+  use GenServer
+
+  @me :dictionary
+
+  #######
+  # API #
+  #######
+
+  def start_link do
+    GenServer.start_link(__MODULE__, [], name: @me)
+  end
 
   @moduledoc """
   We act as an interface to a wordlist (whose name is hardwired in the
@@ -15,9 +26,7 @@ defmodule Hangman.Dictionary do
 
   @spec random_word() :: binary
   def random_word do
-    word_list
-    |> Enum.random
-    |> String.trim
+    GenServer.call(@me, :random_word)
   end
 
   @doc """
@@ -26,15 +35,24 @@ defmodule Hangman.Dictionary do
   """
   @spec words_of_length(integer)  :: [ binary ]
   def words_of_length(len) do
-    word_list
-    |> Stream.map(&String.trim/1)
-    |> Enum.filter(&(String.length(&1) == len))
+    GenServer.call(@me, {:words_of_length, len})
   end
 
+  ##################
+  # IMPLEMENTATION #
+  ##################
 
-  ###########################
-  # End of public interface #
-  ###########################
+  def handle_call(:random_word, _from,  state) do
+    {:reply, word_list |> Enum.random |> String.trim, state}
+  end
+
+  def handle_call({:words_of_length, len}, _from, state) do
+    num = word_list
+    |> Stream.map(&String.trim/1)
+    |> Enum.filter(&(String.length(&1) == len))
+
+    {:reply, num, state}
+  end
 
   defp word_list do
     @word_list_file_name
