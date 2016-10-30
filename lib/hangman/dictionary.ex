@@ -11,7 +11,7 @@ defmodule Hangman.Dictionary do
   @word_list_file_name "assets/words.8800"
 
   def start_link(default \\ []) do
-    GenServer.start(__MODULE__, default, name: @servername)
+    GenServer.start( __MODULE__, default, name: @servername )
   end
 
   @doc """
@@ -21,7 +21,7 @@ defmodule Hangman.Dictionary do
 
   @spec random_word() :: binary
   def random_word do
-    GenServer.call(@servername, {:random_word})
+    GenServer.call( @servername, { :random_word } )
   end
 
   @doc """
@@ -30,7 +30,7 @@ defmodule Hangman.Dictionary do
   """
   @spec words_of_length(integer)  :: [ binary ]
   def words_of_length(len) do
-    GenServer.call(@servername, {:words_of_length, len})
+    GenServer.call( @servername, { :words_of_length, len } )
   end
 
 
@@ -51,7 +51,7 @@ defmodule Hangman.Dictionary do
     { :ok, args }
   end
 
-  def handle_call({:random_word}, _from, state) do
+  def handle_call( { :random_word }, _from, state ) do
     { :reply,
       word_list
               |> Enum.random
@@ -60,7 +60,7 @@ defmodule Hangman.Dictionary do
     }
   end
 
-  def handle_call({:words_of_length, len}, _from, state) do
+  def handle_call( { :words_of_length, len }, _from, state ) do
     { :reply,
       word_list
               |> Stream.map(&String.trim/1)

@@ -4,7 +4,7 @@ defmodule Hangman do
   @moduledoc """
 
   Write your description of your supervision scheme here...
-  
+
   Here the dictionary server is providing the word for the user to play. Its
   sole job is to provide the word and also it doesn't need to store the word
   it provided as that information is maintained in the game session. Hence the
@@ -21,7 +21,7 @@ defmodule Hangman do
   be able to naturally exit from the game once he is done playing, in all other
   cases it needs to be restarted.
 
-  Below is a pictorial structure of the supervision strategy
+  Below is a pictorial representation of the supervision strategy
 
                     #######################
                     # Hangman.Supervisor  #
@@ -30,13 +30,15 @@ defmodule Hangman do
                       |                  |
       #####################             ################### Supervisor Strategy:
       # Dictionary Server #             # Game Supervisor # :one_for_one
-      #####################             ################### Restart Strategy:
+      #####################             ###################
+                                          |                 Restart Strategy:
                                           |                 :permanent
                                           |
                                           |
                                         ###############  Supervisor Strategy:
                                         # Game Server #   :one_for_one
-                                        ###############  Restart Strategy:
+                                        ###############
+                                                         Restart Strategy:
                                                           :transient
   """
 

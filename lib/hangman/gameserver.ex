@@ -46,11 +46,11 @@ defmodule Hangman.GameServer do
   #######################
 
   def init(word) do
-    { :ok, Impl.new_game(word)}
+    { :ok, Impl.new_game(word) }
   end
 
   def handle_cast({ :new_game, word }, _state) do
-    { :noreply, Impl.new_game(word)}
+    { :noreply, Impl.new_game(word) }
   end
 
   def handle_cast({ :crash, reason }, state) do
