@@ -30,7 +30,7 @@ defmodule Hangman.Dictionary do
 
   def start_link() do
     state = word_list |> Enum.to_list
-    {:ok,_pid} = GenServer.start_link( __MODULE__, state, name: __MODULE__)
+    GenServer.start_link( __MODULE__, state, name: __MODULE__)
   end 
 
 
