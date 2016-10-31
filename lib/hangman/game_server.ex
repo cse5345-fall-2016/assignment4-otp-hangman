@@ -34,6 +34,10 @@ defmodule Hangman.GameServer do
     GenServer.call(@me, {:word_as_string, reveal})
   end
 
+  def crash(reason) do
+    GenServer.cast(@me, {:crash, reason})
+  end
+
   #########################
   # Server Implementation #
   #########################
@@ -76,7 +80,9 @@ defmodule Hangman.GameServer do
     {:ok, Hangman.Game.word_as_string(state, reveal), state}
   end
 
-
+  def handle_cast({:crash, reason}, _from, state) do
+    {:stop, reason, state}
+  end
 
 
 

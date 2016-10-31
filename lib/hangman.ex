@@ -11,14 +11,22 @@ defmodule Hangman do
     import Supervisor.Spec, warn: false
 
     # Define workers and child supervisors to be supervised
-    children = [ worker(Hangman.Game, args)
-      # Starts a worker by calling: Hangman.Worker.start_link(arg1, arg2, arg3)
-      # worker(Hangman.Worker, [arg1, arg2, arg3]),
+    # The order matters! Make sure ot put dictionary first because HangmanSupervisor
+    # needs dictionary to exist before it starts!
+    children = [
+      worker(Hangman.Dictionary, [], restart: :transient),
+      supervisor(Hangman.HangmanSupervisor, [])
     ]
 
     # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html
     # for other strategies and supported options
-    opts = [strategy: :one_for_one, name: Hangman.Supervisor]
+
+    # need :rest_for_one at this level, because if Dictionary fails, we need to
+    # restart HangmanSupervisor > GameServer > Game along with the Dictionary;
+    # However, if just the HangmanSupervisor we don't need to restart the Dictionary
+    # This is why HangmanSupervisor has no restart strategy, because we don't want
+    # it restarting to effect the Dictionary
+    opts = [strategy: :rest_for_one, name: Hangman.Supervisor]
     Supervisor.start_link(children, opts)
   end
 end
