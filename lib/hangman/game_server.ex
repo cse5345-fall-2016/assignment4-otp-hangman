@@ -6,7 +6,7 @@ defmodule Hangman.GameServer do
     GenServer.start_link(__MODULE__, game, name: :gameServer)
   end
 
- 
+
   ###################
   # External API
 

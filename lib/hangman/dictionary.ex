@@ -10,15 +10,6 @@ defmodule Hangman.Dictionary do
       GenServer.start_link(__MODULE__, default, name: :dictionary)
     end
 
-#    def random_word do
-#    #  IO.puts "random words "
-#      GenServer.call :dictionary, :random_word
-#    end
-#
-#    def words_of_length(integer) do
-#       GenServer.call :dictionary, {:words_of_length, integer}
-#    end
-
     ###################
     # GenServer implementation
 

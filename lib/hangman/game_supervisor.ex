@@ -1,7 +1,6 @@
 defmodule Hangman.GameSupervisor do
 
    @moduledoc """
-
    @Strategies - :one_for_one
    @Restart Values - :transient
         Hangman.GameServer Child proces is restarted only if it terminates abnormally and populted with random dictionary word
