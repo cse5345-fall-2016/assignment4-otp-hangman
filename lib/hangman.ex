@@ -20,15 +20,7 @@ defmodule Hangman do
   """
 
   def start(_type, _args) do
-
-    import Supervisor.Spec, warn: false
-
-    children = [
-      worker(Hangman.Dictionary, [], restart: @restart),
-      supervisor(GameServer_SubSupervisor, [], restart: @restart)
-    ]
-
-    opts = [strategy: @strategy, name: Hangman.Supervisor]
-    Supervisor.start_link(children, opts)
+    Hangman.Supervisor.start_link("wibble")
   end
+
 end

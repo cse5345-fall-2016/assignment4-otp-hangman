@@ -1,19 +1,17 @@
-defmodule GameServer_SubSupervisor do
-  use Application
+defmodule Hangman.GameServer_SubSupervisor do
+  use Supervisor
 
   @strategy :one_for_one
 
   @restart :transient
 
-  def start(_type, _args) do
-    import Supervisor.Spec, warn: false
+  def start_link(initial_word) do
+    Supervisor.start_link(__MODULE__, initial_word)
+  end
 
-    children = [
-      worker(Hangman.GameServer, [], restart: @restart)
-    ]
-
-    opts = [strategy: @strategy, name: Hangman.GameServer_SubSupervisor]
-    Supervisor.start_link(children, opts)
+  def init(initial_word) do
+    child_processes = [ worker(Sequence.Server, [initial_word], restart: @restart) ]
+    supervise child_processes, strategy:   @strategy
   end
 
 end
