@@ -8,23 +8,29 @@ defmodule Hangman.Dictionary do
   """
 
   def start_link do
-    GenServer.call(__MODULE__, :ok, [])
+    GenServer.call(__MODULE__, :ok, name: __MODULE__)
   end
 
   @doc """
-  Handle incoming requests for random_word
+  Handle incoming requests for random_word.
   """
 
   def handle_call(:random_word, _from, word_list) do
-
+    word = word_list
+    |> Enum.random
+    |> String.trim
+    { :reply, word, word_list }
   end
 
   @doc """
-  Handle incoming requests for words_of_length
+  Handle incoming requests for words_of_length.
   """
 
   def handle_call({:words_of_length, len}, _from, word_list) do
-
+    wordlist = word_list
+    |> Stream.map(&String.trim/1)
+    |> Enum.filter(&(String.length(&1) == len))
+    {:reply, wordlist, word_list}
   end
 
   @moduledoc """
