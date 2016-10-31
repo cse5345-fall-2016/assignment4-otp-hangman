@@ -12,7 +12,7 @@ defmodule Hangman.Game do
 
     Set up the state for a new game, and return that state. The client
     applications will pass this state back to your code in all the
-    subsequent API calls.
+    subsequent API   calls.
 
     The state that's returned will at a minimum contain the word to be
     guessed.
@@ -107,7 +107,7 @@ Here's this module being exercised from an iex session:
 
     iex(13)> { game, state, guess } = G.make_move(game, "b")
     . . .
-    iex(14)> state                                          
+    iex(14)> state
     :bad_guess
 
     iex(15)> { game, state, guess } = G.make_move(game, "f")
