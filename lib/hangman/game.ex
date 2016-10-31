@@ -1,5 +1,5 @@
 defmodule Hangman.Game do
-
+  use GenServer
   @moduledoc """
 
   This is the backend for a Hangman game. It manages the game state.
@@ -107,7 +107,7 @@ Here's this module being exercised from an iex session:
 
     iex(13)> { game, state, guess } = G.make_move(game, "b")
     . . .
-    iex(14)> state                                          
+    iex(14)> state
     :bad_guess
 
     iex(15)> { game, state, guess } = G.make_move(game, "f")
