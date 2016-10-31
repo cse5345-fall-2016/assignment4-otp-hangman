@@ -17,7 +17,7 @@ defmodule Hangman.Game_Server do
     # ========================== Casts ================================
 
     def new_game(word \\ Hangman.Dictionary.random_word) do
-        GenServer.cast(@ai, {new_game: word})
+        GenServer.cast(@ai, {:new_game, word})
     end
 
     def crash(reason) do
