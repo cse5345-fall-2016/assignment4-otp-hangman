@@ -6,7 +6,9 @@ defmodule Hangman do
     # strategy so that whenever the dictionary crashes, all of the games
     # (children) crash as well, and with the permanent restart option they all
     # restart. The game server has the one for one strategy so that as per the
-    # instructions, if the game crashes it will restart itself ONLY. 
+    # instructions, if the game crashes it will restart itself ONLY, and I used
+    # the transient restart option so that it would only restart when it crashes
+    # or errors out and not if it just exits.
 
     def start(_type, _args) do
 
