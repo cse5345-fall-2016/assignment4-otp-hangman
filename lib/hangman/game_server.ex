@@ -3,7 +3,7 @@ defmodule Hangman.GameServer do
   use GenServer
   def start_link(current_word\\Hangman.Dictionary.random_word) do
     game = Hangman.Game.new_game(current_word)
-    GenServer.start_link(__MODULE__, game, name: :gameServer, debug: [:trace,:statistics])
+    GenServer.start_link(__MODULE__, game, name: :gameServer)
   end
 
  
@@ -22,7 +22,11 @@ defmodule Hangman.GameServer do
     GenServer.call :gameServer, {:word_as_string, flag}
   end
 
-  def make_move(:ok, guess) do
+  def make_move(guess) do
+      GenServer.call :gameServer, {:make_move, guess}
+    end
+
+  def make_move(_from, guess) do
     GenServer.call :gameServer, {:make_move, guess}
   end
 
@@ -34,10 +38,14 @@ defmodule Hangman.GameServer do
     GenServer.call :gameServer, :turns_left
   end
 
+  def crash(:normal) do
+    GenServer.cast :gameServer, {:crash, :normal}
+  end
+
    ###################
    # GenServer implementation
 
-   def handle_cast({:new_game, current_word}, _from) do
+   def handle_cast({:new_game, current_word}, game) do
      { :noreply, Hangman.Game.new_game(current_word)}
    end
 
@@ -46,8 +54,8 @@ defmodule Hangman.GameServer do
   end
 
   def handle_call({:make_move, guess}, _from, game) do
-    { game, status, guess } = Hangman.Game.make_move(game, guess)
-    { :reply, {game, status, guess}, game }
+    { new_game, status, _word } = Hangman.Game.make_move(game, guess)
+    { :reply, status, new_game }
   end
 
   def handle_call({:word_as_string, flag}, _from, game) do
@@ -60,6 +68,10 @@ defmodule Hangman.GameServer do
 
   def handle_call(:turns_left, _from, game) do
     { :reply, Hangman.Game.turns_left(game), game}
+  end
+
+  def handle_cast({:crash, :normal}, _from, game) do
+    { :stop, :normal, game}
   end
 
 end
