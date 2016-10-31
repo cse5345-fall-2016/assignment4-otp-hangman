@@ -1,15 +1,20 @@
+
+
+
+
+
+
 defmodule Hangman do
   use Application
 
-  # See http://elixir-lang.org/docs/stable/elixir/Application.html
-  # for more information on OTP Applications
-  def start(_type, args) do
+
+  def start(_type, _args) do
     import Supervisor.Spec, warn: false
 
     # Define workers and child supervisors to be supervised
     children = [
-      worker(Hangman.Dictionary, args),
-      worker(Hangman.GameServer, [])
+      worker(Hangman.Dictionary, [], restart: :permanent),
+      worker(Hangman.GameServer, [], restart: :transient)
     ]
 
     # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html
