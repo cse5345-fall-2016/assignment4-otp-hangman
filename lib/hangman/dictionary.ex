@@ -11,6 +11,10 @@ defmodule Hangman.Dictionary do
 
     @word_list_file_name "assets/words.8800"
 
+    def start_link(default \\ word_list) do
+        GenServer.start_link(__MODULE__, default, name: @ai)
+    end
+
     @doc """
     Return a random word from our word list. Whitespace and newlines
     will have been removed.

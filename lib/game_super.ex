@@ -1,4 +1,4 @@
-defmodule GameSuper do
+defmodule Hangman.Game_Super do
     use Supervisor
 
     @ai __MODULE__
@@ -9,9 +9,9 @@ defmodule GameSuper do
 
 	def init(args) do
 		children = [
-            worker(Hangman.Game_Server, args, restart: :transient)
+            worker(Hangman.GameServer, args, restart: :transient)
         ]
-        
+
 		supervise(children, [strategy: :one_for_one, name: @ai])
     end
 end

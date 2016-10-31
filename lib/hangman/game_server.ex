@@ -1,16 +1,20 @@
-defmodule Hangman.Game_Server do
+defmodule Hangman.GameServer do
 
     use GenServer
     @ai :game_server
 
+    def init(word) do
+        {:ok, word}
+    end
+
     # ========================== Start ================================
 
     def start_link do
-      GenServer.start(__MODULE__, Hangman.Game.new_game, name: @ai)
+      GenServer.start_link(__MODULE__, Hangman.Game.new_game, name: @ai)
     end
 
     def start_link(word) do
-      GenServer.start(__MODULE__, Hangman.Game.new_game(word), name: @ai)
+      GenServer.start_link(__MODULE__, Hangman.Game.new_game(word), name: @ai)
     end
 
     # =================================================================
@@ -67,7 +71,7 @@ defmodule Hangman.Game_Server do
     end
 
     def handle_call({ :make_move, guess}, _from, state) do
-        { new_state, win_status, guess} = Hangman.Game.make_move(state, guess)
+        { new_state, status, guess} = Hangman.Game.make_move(state, guess)
         { :reply, Hangman.Game.turns_left(state), state }
     end
 

@@ -17,10 +17,10 @@ defmodule Hangman do
         # Define workers and child supervisors to be supervised
         children = [
             worker(Hangman.Dictionary, [], restart: :permanent),
-            supervisor(Hangman.GameSuper, [])
+            supervisor(Hangman.Game_Super, [])
         ]
 
-        opts = [strategy: :one_for_all, name: Hangman.Supervisor]
+        opts = [strategy: :rest_for_one, name: Hangman.Supervisor]
         Supervisor.start_link(children, opts)
 
     end
