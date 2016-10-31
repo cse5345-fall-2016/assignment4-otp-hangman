@@ -2,7 +2,7 @@ defmodule Hangman do
     use Application
 
     # For my supervisor scheme I used two supervisors, one as the main
-    # supervisor and one for the game. The main supervisor has the all for one
+    # supervisor and one for the game. The main supervisor has the one for all
     # strategy so that whenever the dictionary crashes, all of the games
     # (children) crash as well, and with the permanent restart option they all
     # restart. The game server has the one for one strategy so that as per the
@@ -20,7 +20,7 @@ defmodule Hangman do
             supervisor(Hangman.GameSuper, [])
         ]
 
-        opts = [strategy: :all_for_one, name: Hangman.Supervisor]
+        opts = [strategy: :one_for_all, name: Hangman.Supervisor]
         Supervisor.start_link(children, opts)
 
     end

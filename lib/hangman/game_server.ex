@@ -66,7 +66,7 @@ defmodule Hangman.Game_Server do
         { :reply, Hangman.Game.word_as_string(state, reveal), state }
     end
 
-    def handle_call({ :make_move}, _from, state) do
+    def handle_call({ :make_move, guess}, _from, state) do
         { new_state, win_status, guess} = Hangman.Game.make_move(state, guess)
         { :reply, Hangman.Game.turns_left(state), state }
     end
