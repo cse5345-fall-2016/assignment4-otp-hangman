@@ -1,6 +1,8 @@
 defmodule Hangman do
   use Application
 
+  @name :"Hangman.Supervisor"
+
   @moduledoc """
 
   My structure is similar to the structure found in "Programming Elixir" page 235.
@@ -21,7 +23,7 @@ defmodule Hangman do
       supervisor(Hangman.GameSupervisor, args, restart: :transient)
     ]
 
-    opts = [strategy: :rest_for_one, name: Hangman.Supervisor]
+    opts = [strategy: :rest_for_one, name: @name]
     Supervisor.start_link(children, opts)
   end
 end
