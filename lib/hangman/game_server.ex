@@ -16,7 +16,7 @@ defmodule Hangman.Game_Server do
     # =================================================================
     # ========================== Casts ================================
 
-    def new_game(word \\ Hangman.Dictionary.random_word)
+    def new_game(word \\ Hangman.Dictionary.random_word) do
         GenServer.cast(@ai, {new_game: word})
     end
 
@@ -27,23 +27,23 @@ defmodule Hangman.Game_Server do
     # =================================================================
     # ========================== Calls ================================
 
-    def word_length
+    def word_length do
         GenServer.call(@ai, { :word_length})
     end
 
-    def make_move(guess)
+    def make_move(guess) do
         GenServer.call(@ai, { :make_move, guess})
     end
 
-    def letters_used_so_far
+    def letters_used_so_far do
         GenServer.call(@ai, { :letters_used_so_far })
     end
 
-    def turns_left
+    def turns_left do
         GenServer.call(@ai, { :turns_left })
     end
 
-    def word_as_string(reveal \\ false)
+    def word_as_string(reveal \\ false) do
         GenServer.call(@ai, { :word_as_string, reveal})
     end
 
