@@ -24,7 +24,7 @@ defmodule Hangman do
       worker(Hangman.Dictionary, [])
     ]
 
-    opts = [strategy: :you_choose_a_strategy, name: Hangman.Supervisor]
+    opts = [strategy: :one_for_all, name: __MODULE__]
     Supervisor.start_link(children, opts)
   end
 end

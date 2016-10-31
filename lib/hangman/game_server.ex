@@ -1,14 +1,15 @@
 defmodule Hangman.GameServer do
   use GenServer
+  alias Hangman.Game, as: Game
 
   @moduledoc """
   Server Implementation for hangman.
   Very helpful site: http://culttt.com/2016/08/24/understanding-genserver-elixir/
   """
 
-  def start_link do
-    state = Game.new_game(Hangman.Dictionary.random_word)
-    GenServer.start_link(__MODULE__, state, name: __MODULE__)
+  def start_link(word \\ Hangman.Dictionary.random_word) do
+    start = Game.new_game(word)
+    GenServer.start_link(__MODULE__, start, name: __MODULE__)
   end
 
   # API

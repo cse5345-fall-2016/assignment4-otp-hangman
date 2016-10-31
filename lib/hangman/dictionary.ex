@@ -7,8 +7,8 @@ defmodule Hangman.Dictionary do
   No initialization, so use :ok.
   """
 
-  def start_link do
-    GenServer.call(__MODULE__, :ok, name: __MODULE__)
+  def start_link() do
+    GenServer.call(__MODULE__, word_list, name: __MODULE__)
   end
 
   @doc """
