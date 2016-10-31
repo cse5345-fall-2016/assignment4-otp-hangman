@@ -6,12 +6,24 @@ defmodule Hangman.Dictionary do
   one word per line.
   """
 
+  use GenServer
+
   @word_list_file_name "assets/words.8800"
 
   @doc """
   Return a random word from our word list. Whitespace and newlines
   will have been removed.
   """
+
+def start_link(arg \\ []]) do
+  GenServer.start_link(__MODULE__,arg,name: :dictinoary)
+end
+
+def init(args) do
+end
+
+#def handle_call
+
 
   @spec random_word() :: binary
   def random_word do
@@ -42,4 +54,8 @@ defmodule Hangman.Dictionary do
     |> IO.stream(:line)
   end
 
+
+  #########################################
+  #       GEN SERVER IMPLEMENTATION      #
+  #########################################
 end
