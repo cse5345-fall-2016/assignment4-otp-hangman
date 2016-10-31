@@ -3,38 +3,41 @@ defmodule Hangman.GameServer do
 	alias Hangman.Game, as:  HGame 
 	alias Hangman.Dictionary, as: HDictionary 
 
+@me :gameserver 
+
+
     # Initialization
     def start_link(word \\ HDictionary.random_word) do 
-        GenServer.start __MODULE__, word, name: GameServer
+        GenServer.start __MODULE__, word, name: @me 
     end 
 
  	# Game Server API Implementation (as defined in Game.ex)
 	 def new_game(secret_word \\ HDictionary.random_word) do
- 		GenServer.cast :GameServer, { :newGame, secret_word }
+ 		GenServer.cast @me, { :newGame, secret_word }
  	end
 
  	def make_move(guess) do
- 		GenServer.call(:GameServer, { :make_move, guess })
+ 		GenServer.call(@me, { :make_move, guess })
  	end
 
  	def word_length do
- 		GenServer.call(:GameServer, { :word_length })
+ 		GenServer.call(@me, { :word_length })
  	end
 
  	def letters_used_so_far do
- 		GenServer.call(:GameServer, { :letters_used_so_far })
+ 		GenServer.call(@me, { :letters_used_so_far })
  	end
 
  	def turns_left do
- 		GenServer.call(:GameServer, { :turns_left })
+ 		GenServer.call(@me, { :turns_left })
  	end
 
  	def word_as_string(reveal \\ false) do
- 		GenServer.call(:GameServer, { :word_as_string, reveal })
+ 		GenServer.call(@me, { :word_as_string, reveal })
  	end
 
  	def crash(exit_code) do
- 		GenServer.cast(:GameServer, { :crash, exit_code })
+ 		GenServer.cast(@me, { :crash, exit_code })
  	end
 
 
@@ -49,9 +52,15 @@ defmodule Hangman.GameServer do
  	#end
 
     # GenServer Callbacks
-    def handle_cast({ :newGame, secret_word }, _from, state) do 
+  #  def handle_cast({ :newGame, secret_word }, _from, state) do 
+   #         {:no_reply, HGame.new_game(secret_word)} 
+   # end 
+
+def handle_cast({ :newGame, secret_word }, state) do 
+
             {:no_reply, HGame.new_game(secret_word)} 
-    end 
+
+end 
 
  	def handle_call({ :make_move, guess }, _from, state) do 
 		# Status here is :won, :lost, :good_guess or :bad_guess 
