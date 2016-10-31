@@ -47,17 +47,11 @@ defmodule Hangman.Dictionary do
   end
 
   def handle_call({:random}, _from, state) do
-    {:reply, word_list
-             |> Enum.random
-             |> String.trim, 
-    state}
+    {:reply, select_random_word, state}
   end
 
   def handle_call({:length, len}, _from, state) do
-    {:reply, word_list
-             |> Stream.map(&String.trim/1)
-             |> Enum.filter(&(String.length(&1) == len)),
-    state}
+    {:reply, word_length(len), state}
   end
 
   ###########################
@@ -68,6 +62,18 @@ defmodule Hangman.Dictionary do
     @word_list_file_name
     |> File.open!
     |> IO.stream(:line)
+  end
+
+  defp select_random_word do
+    word_list
+    |> Enum.random
+    |> String.trim
+  end
+
+  defp word_length(len) do
+    word_list
+    |> Stream.map(&String.trim/1)
+    |> Enum.filter(&(String.length(&1) == len))
   end
 
 end
