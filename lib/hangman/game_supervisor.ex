@@ -7,7 +7,6 @@ defmodule Hangman.GameSupervisor do
   # Developer note: I get a warning for undefined behavior in this function,
   # but I don't know why. It erred when I tried to name it "start"
   # like in hangman.ex. Comments with explanation are appreciated.
-  # I also don't know why I can only name this __MODULE__ instead of a unique name.
   #####
 
   def start_link(args \\ []) do
