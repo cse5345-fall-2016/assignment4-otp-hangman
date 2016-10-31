@@ -77,7 +77,7 @@ As you start to add functionality, more and more will pass.
 A total of 100 marks are available:
 
 50 for a working program (one that passes the tests included here and any
-   others I may run wile grading)
+   others I may run while grading)
 
 10 for a good description of the supervision strategy you use, justifying
    why it meets the requirements above
