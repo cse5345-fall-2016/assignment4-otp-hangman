@@ -1,5 +1,4 @@
 defmodule Hangman.Game do
-  use GenServer
 
   @moduledoc """
 

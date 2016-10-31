@@ -9,7 +9,7 @@ defmodule Hangman do
     # Define workers and child supervisors to be supervised
     children = [
       worker(Hangman.Dictionary, args),
-      worker(Hangman.Game, [])
+      worker(Hangman.GameServer, [])
     ]
 
     # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html

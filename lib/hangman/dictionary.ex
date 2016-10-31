@@ -26,14 +26,6 @@ defmodule Hangman.Dictionary do
   end
 
 
-  @doc """
-  Return a list of all the words in our word list of a given length.
-  Whitespace and newlines will have been removed.
-  """
-  @spec words_of_length(integer)  :: [ binary ]
-
-
-
   ###########################
   # End of public interface #
   ###########################
