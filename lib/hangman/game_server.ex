@@ -63,12 +63,16 @@ defmodule Hangman.GameServer do
   def handle_cast({:new_game, default}) do
     { :noreply, Game.new_game(default) }
   end
+  
+  def handle_cast({:crash, reason}) do
+    {:stop, reason}
+  end
 
   # handle_call() is the only function that returns an updated state because it
   # is the only one that actually mutates the game state, all of the other
   # handle_call() functions just return something about the state
   def handle_call({:make_move, guess}, _from, state) do
-    {updated_state, status, letter} = Game.make_move(state, guess)
+    {updated_state, status, _letter} = Game.make_move(state, guess)
     {:reply, status, updated_state} # this line returns status back to the API call and continues with the updated_state
   end
 
@@ -90,7 +94,4 @@ defmodule Hangman.GameServer do
     {:reply, Game.word_as_string(state, reveal), state}
   end
 
-  def handle_cast({:crash, reason}, _from, state) do
-    {:stop, reason, state}
-  end
 end
