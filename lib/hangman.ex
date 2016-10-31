@@ -20,7 +20,7 @@ defmodule Hangman do
             supervisor(Hangman.Game_Super, [])
         ]
 
-        opts = [strategy: :rest_for_one, name: Hangman.Supervisor]
+        opts = [strategy: :one_for_all, name: Hangman.Supervisor]
         Supervisor.start_link(children, opts)
 
     end
