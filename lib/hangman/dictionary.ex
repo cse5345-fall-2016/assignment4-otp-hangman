@@ -1,4 +1,25 @@
 defmodule Hangman.Dictionary do
+    use GenServer
+
+
+    ###################
+    # External API
+
+    def start_link(default) do
+       IO.puts("start link")
+      GenServer.start_link(__MODULE__, default, name: :dictionary)
+    end
+
+    ###################
+    # GenServer implementation
+
+    def handle_call(:random_word, _from, default) do
+        { :reply, random_word, default }
+    end
+
+    def handle_call({:words_of_length, integer}, _from, default) do
+        { :reply, words_of_length(integer), default }
+    end
 
   @moduledoc """
   We act as an interface to a wordlist (whose name is hardwired in the
@@ -6,7 +27,7 @@ defmodule Hangman.Dictionary do
   one word per line.
   """
 
-  @word_list_file_name "assets/words.8800"
+  @word_list_file_name "/Users/stekula/smu/assignment4-otp-hangman/assets/words.8800"
 
   @doc """
   Return a random word from our word list. Whitespace and newlines

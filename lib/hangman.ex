@@ -1,23 +1,26 @@
 defmodule Hangman do
-  use Application
+  use Application,Supervisor
 
   @moduledoc """
 
-  Write your description of your supervision scheme here...
+  @Strategies - Hangman supervisor defines "one_for_one"" strategies to manage child processes.
+    Hence Hangman.Dictionary is needed to retrive random word so on child processors crash the supervisor will restart
+   "Hangman.Dictionary and Hangman.GameSupervisor".
+
+  @Restart Values - restart: :transient i.e , Child proces is restarted only if it terminates abnormally
 
   """
 
   def start(_type, _args) do
 
-    # Uncomment and complete this:
+     import Supervisor.Spec, warn: false
 
-    # import Supervisor.Spec, warn: false
-    # 
-    # children = [
-    # ]
-    # 
-    # opts = [strategy: :you_choose_a_strategy, name: Hangman.Supervisor]
-    # Supervisor.start_link(children, opts)
+     children = [
+        worker(Hangman.Dictionary,["shashi"]),
+        supervisor(Hangman.GameSupervisor, [])
+     ]
+     opts = [strategy: :one_for_one, name: Hangman.Supervisor, restart: :transient]
+     Supervisor.start_link(children, opts)
   end
 end
 
