@@ -1,4 +1,6 @@
 defmodule Hangman.Dictionary do
+  # NEED TO START GENSERVER in dictionary
+  use GenServer
 
   @moduledoc """
   We act as an interface to a wordlist (whose name is hardwired in the
