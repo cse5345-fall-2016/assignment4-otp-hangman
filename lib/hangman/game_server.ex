@@ -2,7 +2,7 @@ defmodule Hangman.GameServer do
   use GenServer
 
   @moduledoc """
-  We act as in interface for the hangman game.
+  We act as an interface for the hangman game.
   """
 
   alias Hangman.Game, as: G
