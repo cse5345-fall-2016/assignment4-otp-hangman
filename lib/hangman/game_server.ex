@@ -8,8 +8,8 @@ defmodule Hangman.GameServer do
 	# API #
 	#######
 
-	def start_link(default) do
-    	GenServer.start_link(__MODULE__, API.new_game(default), name: @me)
+	def start_link(arg) do
+    	GenServer.start_link(__MODULE__, API.new_game(arg), name: @me)
   	end
 
   	def start_link do
