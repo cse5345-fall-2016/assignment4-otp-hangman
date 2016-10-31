@@ -1,5 +1,6 @@
 defmodule Hangman.Game do
 
+   require Logger
   @moduledoc """
 
   This is the backend for a Hangman game. It manages the game state.
@@ -107,7 +108,7 @@ Here's this module being exercised from an iex session:
 
     iex(13)> { game, state, guess } = G.make_move(game, "b")
     . . .
-    iex(14)> state                                          
+    iex(14)> state
     :bad_guess
 
     iex(15)> { game, state, guess } = G.make_move(game, "f")
@@ -144,16 +145,16 @@ Here's this module being exercised from an iex session:
   If a paramter is supplied, it is used instead of a random word.
   This is used by the unit tests.
   """
-
+  #@spec new_game(map, binary) :: state
+  #def new_game(stateMap, word) do
   @spec new_game(binary) :: state
-  def new_game(word \\ Hangman.Dictionary.random_word) do
+  def new_game(word) do
     %{
-      word:        String.codepoints(word) |> Enum.map(&{&1, false}),
+      word: String.codepoints(word) |> Enum.map(&{&1, false}),
       turns_left:  10,
-      guessed:     MapSet.new,
+      guessed:   MapSet.new,
     }
   end
-
 
   @doc """
   `{game, status, guess} = make_move(game, guess)`
@@ -192,7 +193,7 @@ Here's this module being exercised from an iex session:
   Return the length of the current word.
   """
 
-  @spec word_length(state) :: integer
+#  @spec word_length(state) :: integer
   def word_length(%{ word: word }) do
     length(word)
   end
