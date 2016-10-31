@@ -4,7 +4,6 @@ defmodule Hangman.Dictionary do
 
   @doc """
   Start the server and provide location for server callbacks.
-  No initialization, so use :ok.
   """
 
   def start_link() do

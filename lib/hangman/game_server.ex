@@ -7,12 +7,12 @@ defmodule Hangman.GameServer do
   Very helpful site: http://culttt.com/2016/08/24/understanding-genserver-elixir/
   """
 
+  # API
+
   def start_link(word \\ Hangman.Dictionary.random_word) do
     start = Game.new_game(word)
     GenServer.start_link(__MODULE__, start, name: __MODULE__)
   end
-
-  # API
 
   def make_move(guess) do
    GenServer.call __MODULE__, { :make_move, guess }
