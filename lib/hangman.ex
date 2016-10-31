@@ -16,7 +16,7 @@ defmodule Hangman do
     # Define workers and child supervisors to be supervised
     children = [
       worker(Hangman.Dictionary, [], restart: :permanent),
-      worker(Hangman.GameServer, [], restart: :transient)
+      worker(Hangman.GameSupervisor, [], restart: :transient)
     ]
 
     # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html
