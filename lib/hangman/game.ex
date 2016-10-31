@@ -107,7 +107,7 @@ Here's this module being exercised from an iex session:
 
     iex(13)> { game, state, guess } = G.make_move(game, "b")
     . . .
-    iex(14)> state                                          
+    iex(14)> state
     :bad_guess
 
     iex(15)> { game, state, guess } = G.make_move(game, "f")
@@ -131,8 +131,6 @@ Here's this module being exercised from an iex session:
 
   """
 
-
-
   @type state :: map
   @type ch    :: binary
   @type optional_ch :: ch | nil
@@ -146,7 +144,7 @@ Here's this module being exercised from an iex session:
   """
 
   @spec new_game(binary) :: state
-  def new_game(word \\ Hangman.Dictionary.random_word) do
+  def new_game(word) do
     %{
       word:        String.codepoints(word) |> Enum.map(&{&1, false}),
       turns_left:  10,
