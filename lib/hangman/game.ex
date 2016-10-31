@@ -1,5 +1,4 @@
 defmodule Hangman.Game do
-  use GenServer
   @moduledoc """
 
   This is the backend for a Hangman game. It manages the game state.
