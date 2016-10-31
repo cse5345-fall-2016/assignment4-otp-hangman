@@ -13,7 +13,8 @@ defmodule Hangman.Mixfile do
   def application do
     [
       applications: [:logger],
-    ]
+	  mod: {Hangman, []}
+	]
   end
 
   defp deps do

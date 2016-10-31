@@ -9,10 +9,10 @@ defmodule Hangman.HumanPlayer do
   then interact with you as you make guesses.
   """
 
-  alias Hangman.Game
+  alias Hangman.GameServer, as: Game
 
   def play do
-    state = Game.new_game
+    state = Game.start_link()
     get_next_move({state, :first_move, nil})
   end
 
@@ -24,14 +24,14 @@ defmodule Hangman.HumanPlayer do
   defp get_next_move({state, :lost, nil}) do
     clear_screen
     IO.puts drawing(0)
-    IO.puts "\nSorry, you lose. The word was: #{Game.word_as_string(state, true)}"
+    IO.puts "\nSorry, you lose. The word was: #{Game.word_as_string( true)}"
   end
 
   defp get_next_move({state, move_status, guess}) do
     draw_current_board(state)
     report_move_status(move_status, guess)
     guess = get_guess(state)
-    Game.make_move(state, guess) |> get_next_move
+    Game.make_move( guess) |> get_next_move
   end
 
   defp report_move_status(ms, guess) do
@@ -43,7 +43,7 @@ defmodule Hangman.HumanPlayer do
   end
 
   def get_guess(state) do
-    guessed = state |> Game.letters_used_so_far
+    guessed = Game.letters_used_so_far
     if length(guessed) > 0 do
       IO.puts "Letters used so far: #{ guessed |> Enum.join(", ")}"
     end
@@ -52,7 +52,7 @@ defmodule Hangman.HumanPlayer do
 
   def guess_until_valid(state) do
     guess = IO.gets("Next letter:   ") |> String.downcase |> String.trim
-    guessed = state |> Game.letters_used_so_far
+    guessed = Game.letters_used_so_far
 
     cond do
       String.length(guess) != 1 ->
@@ -70,8 +70,8 @@ defmodule Hangman.HumanPlayer do
 
   def draw_current_board(state) do
     clear_screen
-    IO.puts drawing(Game.turns_left(state))
-    IO.puts "Word to guess: #{Game.word_as_string(state)}\n"
+    IO.puts drawing(Game.turns_left)
+    IO.puts "Word to guess: #{Game.word_as_string()}\n"
   end
 
   defp clear_screen(), do: IO.write "\e[H\e[2J"
