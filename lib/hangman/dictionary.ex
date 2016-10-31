@@ -51,7 +51,7 @@ defmodule Hangman.Dictionary do
   end
 
   def handle_call({:length, len}, _from, state) do
-    {:reply, word_length(len), state}
+    {:reply, len |> word_length, state}
   end
 
   ###########################

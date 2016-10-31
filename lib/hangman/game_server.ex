@@ -49,24 +49,24 @@ defmodule Hangman.GameServer do
 	end
 
 	def handle_call({:move, guess}, _from, state) do
-		{game, status, _} = API.make_move(state, guess)
+		{game, status, _} = state |> API.make_move(guess)
 		{:reply, status, game}
 	end
 
 	def handle_call({:length}, _from, state) do
-		{:reply, API.word_length(state), state}
+		{:reply, state |> API.word_length, state}
 	end
 
 	def handle_call({:letters}, _from, state) do
-		{:reply, API.letters_used_so_far(state), state}
+		{:reply, state |> API.letters_used_so_far, state}
 	end
 
 	def handle_call({:turns}, _from, state) do
-		{:reply, API.turns_left(state), state}
+		{:reply, state |> API.turns_left, state}
 	end
 
 	def handle_call({:string, reveal}, _from, state) do
-		{:reply, API.word_as_string(state, reveal), state}
+		{:reply, state |> API.word_as_string(reveal), state}
 	end
 
 	def handle_cast({:crash, error}, _from, state) do
