@@ -35,7 +35,7 @@ defmodule Hangman.Dictionary do
   """
   @spec words_of_length(integer)  :: [ binary ]
   def words_of_length(len) do
-    GenServer.call(@me, {:length})
+    GenServer.call(@me, {:length, len})
   end
 
   #########################
@@ -46,14 +46,14 @@ defmodule Hangman.Dictionary do
     {:ok, Enum.into(args, %{})}
   end
 
-  def handle_call(:random, _from, state) do
+  def handle_call({:random}, _from, state) do
     {:reply, word_list
              |> Enum.random
              |> String.trim, 
     state}
   end
 
-  def handle_call(:length, _from, state) do
+  def handle_call({:length, len}, _from, state) do
     {:reply, word_list
              |> Stream.map(&String.trim/1)
              |> Enum.filter(&(String.length(&1) == len)),

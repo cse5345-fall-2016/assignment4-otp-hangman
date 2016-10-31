@@ -4,28 +4,40 @@ defmodule Hangman.GameServer do
 
 	@me :game_server
 	
-	def start_link(default \\ []) do
-    	GenServer.start_link(__MODULE__, default, name: @me)
+	#######
+	# API #
+	#######
+
+	def start_link(default) do
+    	GenServer.start_link(__MODULE__, API.new_game(default), name: @me)
+  	end
+
+  	def start_link do
+  		GenServer.start_link(__MODULE__, API.new_game, name: @me)
   	end
 
   	def make_move(guess) do
-  		Genserver.call(@me, {:move, guess})
+  		GenServer.call(@me, {:move, guess})
   	end
 
   	def word_length do
-  		Genserver.call(@me, {:length})
+  		GenServer.call(@me, {:length})
   	end
 
   	def letters_used_so_far do
-  	  	Genserver.call(@me, {:letters})
+  	  	GenServer.call(@me, {:letters})
   	end
 
   	def turns_left do
-  		Genserver.call(@me, {:turns})
+  		GenServer.call(@me, {:turns})
   	end
 
-  	def word_as_string(state, reveal \\ false) do
-  		Genserver.call(@me, {:string, reveal})
+  	def word_as_string(reveal \\ false) do
+  		GenServer.call(@me, {:string, reveal})
+  	end
+
+  	def crash(error) do
+  		GenServer.cast(@me, {:crash, error})
   	end
 
 	#########################
@@ -37,7 +49,8 @@ defmodule Hangman.GameServer do
 	end
 
 	def handle_call({:move, guess}, _from, state) do
-		{:reply, API.make_move(state, guess), state}
+		{game, status, _} = API.make_move(state, guess)
+		{:reply, status, game}
 	end
 
 	def handle_call({:length}, _from, state) do
@@ -54,6 +67,10 @@ defmodule Hangman.GameServer do
 
 	def handle_call({:string, reveal}, _from, state) do
 		{:reply, API.word_as_string(state, reveal), state}
+	end
+
+	def handle_cast({:crash, error}, _from, state) do
+		{:stop, error, state}
 	end
 
 end
