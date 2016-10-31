@@ -7,15 +7,15 @@ defmodule Hangman do
     """
   # See http://elixir-lang.org/docs/stable/elixir/Application.html
   # for more information on OTP Applications
-  def start(_type, args) do
+  def start(_type, _args) do
     import Supervisor.Spec, warn: false
 
     # Define workers and child supervisors to be supervised
     # The order matters! Make sure ot put dictionary first because HangmanSupervisor
     # needs dictionary to exist before it starts!
     children = [
-      worker(Hangman.Dictionary, [], restart: :transient),
-      supervisor(Hangman.HangmanSupervisor, [])
+      worker(Hangman.Dictionary, [], restart: :permanent),
+      supervisor(Hangman.HangmanSupervisor, [], restart: :transient)
     ]
 
     # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html
@@ -26,7 +26,7 @@ defmodule Hangman do
     # However, if just the HangmanSupervisor we don't need to restart the Dictionary
     # This is why HangmanSupervisor has no restart strategy, because we don't want
     # it restarting to effect the Dictionary
-    opts = [strategy: :rest_for_one, name: Hangman.Supervisor]
+    opts = [strategy: :rest_for_one, name: __MODULE__]
     Supervisor.start_link(children, opts)
   end
 end

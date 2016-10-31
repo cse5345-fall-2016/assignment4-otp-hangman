@@ -5,8 +5,8 @@ defmodule Hangman.HangmanSupervisor do
   # See http://elixir-lang.org/docs/stable/elixir/Application.html
   # for more information on OTP Applications
 
-  def start_link(default \\ []) do
-    Supervisor.start_link(@me, default)
+  def start_link do
+    Supervisor.start_link(@me, :ok, name: @me)
   end
 
   # needs an init defined for the start_link() above^
@@ -14,10 +14,10 @@ defmodule Hangman.HangmanSupervisor do
     # Define workers and child supervisors to be supervised
     children = [
       # restart GameServer on error only
-      worker(Hangman.GameServer, [], restart: :permanent)
+      worker(Hangman.GameServer, [], restart: :transient  )
     ]
     # HangmanSupervisor only has one child, the GameServer
-    opts = [strategy: :one_for_one, name: @me]
-    supervise(children, opts)
+    # opts = [strategy: :one_for_one]
+    supervise(children, strategy: :one_for_one)
   end
 end
