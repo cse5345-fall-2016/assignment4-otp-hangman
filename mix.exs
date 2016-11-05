@@ -12,11 +12,14 @@ defmodule Hangman.Mixfile do
 
   def application do
     [
-      applications: [:logger],
+      applications: [:poolboy],
+      mod: {Hangman, []}
     ]
   end
 
   defp deps do
-    []
+    [
+      {:poolboy, "~> 1.5" }
+    ]
   end
 end
